@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "dev": "unocss \"templates/pages/**/*.html\" -o \"templates/assets/uno.css\" --watch",
+    "build": "unocss \"templates/pages/**/*.html\" -o \"templates/assets/uno.css\""
+  },
+  "devDependencies": {
+    "@unocss/cli": "^0.55.3"
+  },
+  "name": "tt-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yinloo-ola/tt-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yinloo-ola/tt-app/issues"
+  },
+  "homepage": "https://github.com/yinloo-ola/tt-app#readme",
+  "description": ""
+}
