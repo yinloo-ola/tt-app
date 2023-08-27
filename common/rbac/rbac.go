@@ -1,4 +1,4 @@
-package srbac
+package rbac
 
 import (
 	"fmt"

@@ -3,9 +3,9 @@ package models
 import "github.com/yinloo-ola/tt-app/util/store"
 
 type Permission struct {
-	Id          int64  `db:"id,pk"`
-	Name        string `db:"name"`
-	Description string `db:"description"`
+	Id          int64  `db:"id,pk" json:"id"`
+	Name        string `db:"name" json:"name"`
+	Description string `db:"description" json:"description"`
 }
 
 func (o *Permission) FieldsVals() []any {

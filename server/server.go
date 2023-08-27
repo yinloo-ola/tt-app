@@ -3,25 +3,39 @@ package main
 import (
 	"context"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	accesscontrol "github.com/yinloo-ola/tt-app/services/access-control/api"
+	home "github.com/yinloo-ola/tt-app/services/home/api"
+	"github.com/yinloo-ola/tt-app/templates"
 )
 
 func main() {
+	initLogger()
+
 	router := gin.Default()
-	router.GET("/", func(c *gin.Context) {
-		time.Sleep(5 * time.Second)
-		c.String(http.StatusOK, "Welcome Gin Server")
-	})
+	router.Use(static.Serve("/", static.LocalFile("../templates/assets", false)))
+	router.SetHTMLTemplate(templates.Parse())
+
+	homeGroup := router.Group("/")
+	home.AddAPIs(homeGroup)
+
+	accessControlGroup := router.Group("/access_control")
+	accesscontrol.AddAPIs(accessControlGroup)
 
 	srv := &http.Server{
 		Addr:    ":8080",
 		Handler: router,
+		ErrorLog: slog.NewLogLogger(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+			AddSource: true,
+		}), slog.LevelError),
 	}
 
 	go func() {
@@ -33,7 +47,7 @@ func main() {
 
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 5 seconds.
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	// kill (no param) default send syscanll.SIGTERM
 	// kill -2 is syscall.SIGINT
 	// kill -9 is syscall. SIGKILL but can"t be catch, so don't need add it

@@ -3,6 +3,7 @@ module github.com/yinloo-ola/tt-app
 go 1.21.0
 
 require (
+	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/stretchr/testify v1.8.4
 	modernc.org/sqlite v1.25.0
