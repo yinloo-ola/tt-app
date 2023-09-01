@@ -14,7 +14,10 @@ type APIHomeController struct {
 }
 
 func (o *APIHomeController) Index(c *gin.Context) {
-	c.HTML(200, "homeHTML", map[string]string{})
+	c.HTML(200, "homeHTML", map[string]string{
+		"Title": "Table Tennis App",
+		"App":   "Table Tennis App",
+	})
 }
 
 func (o *APIHomeController) Link(c *gin.Context) {
@@ -24,5 +27,8 @@ func (o *APIHomeController) Link(c *gin.Context) {
 		c.HTML(200, link, map[string]string{})
 		return
 	}
-	c.HTML(200, link+"HTML", map[string]string{})
+	c.HTML(200, link+"HTML", map[string]string{
+		"Title": "Table Tennis App",
+		"App":   "Table Tennis App",
+	})
 }

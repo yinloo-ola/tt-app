@@ -4,7 +4,10 @@
     "build": "unocss \"templates/pages/**/*.html\" -o \"templates/assets/uno.css\""
   },
   "devDependencies": {
-    "@unocss/cli": "^0.55.3"
+    "@iconify-json/tabler": "^1.1.89",
+    "@unocss/cli": "^0.55.3",
+    "@unocss/preset-icons": "^0.55.3",
+    "unocss": "^0.55.3"
   },
   "name": "tt-app",
   "version": "1.0.0",

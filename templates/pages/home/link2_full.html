@@ -1,12 +1,10 @@
 {{define "link2HTML"}}
 
-{{template "headHTML"}}
+{{template "headHTML" . }}
 
-{{template "headerHTML"}}
+{{template "headerHTML" .}}
 
-<main id="main">
 {{template "link2" .}}
-</main>
 
 {{template "footerHTML"}}
 

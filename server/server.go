@@ -21,9 +21,15 @@ func main() {
 	initLogger()
 
 	router := gin.Default()
-	router.Use(static.Serve("/", static.LocalFile("../templates/assets", false)))
-	router.SetHTMLTemplate(templates.Parse())
+	router.Use(static.Serve("/", static.LocalFile("templates/assets", false)))
 
+	env := os.Getenv("GIN_MODE")
+
+	if env == "debug" {
+		router.LoadHTMLGlob("templates/pages/**/*")
+	} else {
+		router.SetHTMLTemplate(templates.Parse())
+	}
 	homeGroup := router.Group("/")
 	home.AddAPIs(homeGroup)
 
