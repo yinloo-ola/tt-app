@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "unocss \"templates/pages/**/*.html\" -o \"templates/assets/uno.css\" --watch",
-    "build": "unocss \"templates/pages/**/*.html\" -o \"templates/assets/uno.css\""
+    "dev": "unocss \"views/pages/**/*.html\" -o \"views/assets/uno.css\" --watch",
+    "build": "unocss \"views/pages/**/*.html\" -o \"views/assets/uno.css\""
   },
   "devDependencies": {
     "@iconify-json/tabler": "^1.1.89",
