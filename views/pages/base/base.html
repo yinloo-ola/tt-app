@@ -1,0 +1,47 @@
+{{define "base" -}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" type="text/css" href="/uno.css">
+    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js" defer></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.11" defer></script>
+</head>
+
+<body style="margin:0" class="font-serif">
+    <div class="px-5 py-2 b-b bg-amber-2 flex flex-row justify-between">
+        <!-- <img src="/tt-logo.svg" alt="tt-logo" class="h-16" /> -->
+        <div class="flex items-center gap-2">
+            <div class="i-tabler-cards h-12 w-12"></div>
+            <div>{{.App}}</div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="relative">
+                <div class="i-tabler-grid-dots text-orange-800 h-7 w-7 border-solid border-gray-600 border-1 rounded relative cursor-pointer"
+                    _="on click toggle .hidden on #popup">
+                </div>
+                <div id="popup" class="absolute right-0 bg-white p-4 border rounded-lg w-16 shadow-lg z-50 hidden mt-2">
+                    <div class="flex flex-col items-center gap-4">
+                        <a class="no-underline hover:underline" href="/link1" hx-trigger="click" hx-get="/link1"
+                            hx-target="main" hx-push-url="link1">Link 1</a>
+                        <a class="no-underline hover:underline" href="/link2" hx-trigger="click" hx-get="/link2"
+                            hx-target="main" hx-push-url="link2">Link 2</a>
+                        <a class="no-underline hover:underline" href="/link3" hx-trigger="click" hx-get="/link3"
+                            hx-target="main" hx-push-url="link3">Link 3</a>
+                    </div>
+                </div>
+            </div>
+            <a class="no-underline hover:underline" href="/login" hx-trigger="click" hx-get="/login" hx-target="main"
+                hx-push-url="/login">Login</a>
+        </div>
+    </div>
+    <main id="main" class="p-2">
+        {{- .Main -}}
+    </main>
+</body>
+
+</html>
+{{- end}}
