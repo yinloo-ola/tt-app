@@ -1,0 +1,19 @@
+{{define "access_control" -}}
+<div class="">
+    <div id="ac-tabs" hx-target="#ac-contents"
+        _="on htmx:afterOnLoad set @aria-selected of <[aria-selected=true]/> to false tell the target take .tab-selected set @aria-selected to true"
+        class="flex flex-row h-full m-4 bg-gray-100 shadow-md rounded-md divide-solid divide-x divide-gray-300 divide-y-none">
+        <div class="flex flex-col min-h-128 rounded-l-md p-4 gap-2">
+            <div hx-get="/access_control/users" aria-controls="tab-content" aria-selected="true"
+                class="tab-pill">Users</div>
+            <div hx-get="/access_control/roles" aria-controls="tab-content" aria-selected="true"
+                class="tab-pill">Roles</div>
+            <div hx-get="/access_control/permissions" aria-controls="tab-content" aria-selected="true"
+                class="tab-pill tab-selected">Permissions</div>
+        </div>
+        <div id="ac-contents" class="flex w-full rounded-r-md p-4">
+            {{.Body}}
+        </div>
+    </div>
+</div>
+{{- end}}

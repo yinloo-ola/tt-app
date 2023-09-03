@@ -14,6 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	access_control_api "github.com/yinloo-ola/tt-app/services/access_control/api"
 	home "github.com/yinloo-ola/tt-app/services/home/api"
+	"github.com/yinloo-ola/tt-app/util/template_util"
 	"github.com/yinloo-ola/tt-app/views"
 )
 
@@ -25,23 +26,26 @@ func main() {
 
 	env := os.Getenv("GIN_MODE")
 
-	var templateExecutor views.TemplateExecutor
+	var templateExecutor template_util.TemplateExecutor
 	if env == "debug" {
+		slog.Debug("DEV mode")
 		router.LoadHTMLGlob(views.Glob())
-		templateExecutor = &views.DebugTemplateExecutor{
+		templateExecutor = &template_util.DebugTemplateExecutor{
 			Glob: views.Glob(),
 		}
 	} else {
+		gin.SetMode(gin.ReleaseMode)
 		router.SetHTMLTemplate(views.ParseFS())
-		templateExecutor = &views.ReleaseTemplateExecutor{
+		templateExecutor = &template_util.ReleaseTemplateExecutor{
 			Template: views.ParseGlob(),
 		}
 	}
+
 	homeGroup := router.Group("/")
 	home.AddAPIs(homeGroup, templateExecutor)
 
 	accessControlGroup := router.Group("/access_control")
-	access_control_api.AddAPIs(accessControlGroup)
+	access_control_api.AddAPIs(accessControlGroup, templateExecutor)
 
 	srv := &http.Server{
 		Addr:    ":8080",

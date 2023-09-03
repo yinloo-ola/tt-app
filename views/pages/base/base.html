@@ -23,14 +23,14 @@
                 <div class="i-tabler-grid-dots text-orange-800 h-7 w-7 border-solid border-gray-600 border-1 rounded relative cursor-pointer"
                     _="on click toggle .hidden on #popup">
                 </div>
-                <div id="popup" class="absolute right-0 bg-white p-4 border rounded-lg w-16 shadow-lg z-50 hidden mt-2">
-                    <div class="flex flex-col items-center gap-4">
-                        <a class="no-underline hover:underline" href="/link1" hx-trigger="click" hx-get="/link1"
-                            hx-target="main" hx-push-url="link1">Link 1</a>
+                <div id="popup" class="absolute right-0 bg-white p-4 border rounded-lg w-full shadow-lg z-50 hidden mt-2">
+                    <div class="flex flex-col items-center gap-4 px-2 w-full">
+                        <a class="no-underline hover:underline" href="/access_control/permissions" hx-trigger="click" hx-get="/access_control/permissions"
+                            hx-target="main" hx-push-url="/access_control/permissions">Permissions</a>
                         <a class="no-underline hover:underline" href="/link2" hx-trigger="click" hx-get="/link2"
-                            hx-target="main" hx-push-url="link2">Link 2</a>
+                            hx-target="main" hx-push-url="/link2">Link 2</a>
                         <a class="no-underline hover:underline" href="/link3" hx-trigger="click" hx-get="/link3"
-                            hx-target="main" hx-push-url="link3">Link 3</a>
+                            hx-target="main" hx-push-url="/link3">Link 3</a>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                 hx-push-url="/login">Login</a>
         </div>
     </div>
-    <main id="main" class="p-2">
+    <main id="main" class="">
         {{- .Main -}}
     </main>
 </body>

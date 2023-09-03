@@ -8,4 +8,8 @@ export default defineConfig({
         presetIcons({}),
         presetUno(),
     ],
+    shortcuts: {
+        'tab-pill': 'px-4 py-2 flex items-center rounded-md cursor-pointer',
+        'tab-selected': 'bg-yellow-400'
+    },
 })
