@@ -4,24 +4,8 @@
 .i-tabler-cards{--un-icon:url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 24 24' width='1em' height='1em' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m3.604 7.197l7.138-3.109a.96.96 0 0 1 1.27.527l4.924 11.902a1 1 0 0 1-.514 1.304L9.285 20.93a.96.96 0 0 1-1.271-.527L3.09 8.5a1 1 0 0 1 .514-1.304zM15 4h1a1 1 0 0 1 1 1v3.5M20 6c.264.112.52.217.768.315a1 1 0 0 1 .53 1.311L19 13'/%3E%3C/svg%3E");-webkit-mask:var(--un-icon) no-repeat;mask:var(--un-icon) no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;background-color:currentColor;color:inherit;width:1em;height:1em;}
 .i-tabler-grid-dots{--un-icon:url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 24 24' width='1em' height='1em' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0M4 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0M4 19a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0'/%3E%3C/svg%3E");-webkit-mask:var(--un-icon) no-repeat;mask:var(--un-icon) no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;background-color:currentColor;color:inherit;width:1em;height:1em;}
 /* layer: shortcuts */
-.container{width:100%;}
 .tab-pill{display:flex;cursor:pointer;align-items:center;border-radius:0.375rem;padding-left:1rem;padding-right:1rem;padding-top:0.5rem;padding-bottom:0.5rem;}
 .tab-selected{--un-bg-opacity:1;background-color:rgba(250,204,21,var(--un-bg-opacity));}
-@media (min-width: 640px){
-.container{max-width:640px;}
-}
-@media (min-width: 768px){
-.container{max-width:768px;}
-}
-@media (min-width: 1024px){
-.container{max-width:1024px;}
-}
-@media (min-width: 1280px){
-.container{max-width:1280px;}
-}
-@media (min-width: 1536px){
-.container{max-width:1536px;}
-}
 /* layer: default */
 .absolute{position:absolute;}
 .relative{position:relative;}
@@ -36,6 +20,7 @@
 .h-full{height:100%;}
 .min-h-128{min-height:32rem;}
 .w-12{width:3rem;}
+.w-16{width:4rem;}
 .w-7{width:1.75rem;}
 .w-full{width:100%;}
 .flex{display:flex;}
