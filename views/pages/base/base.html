@@ -11,8 +11,9 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.11" defer></script>
 </head>
 
-<body style="margin:0" class="font-serif" _="on click if #popup do not match .hidden then send closePopover to #popup">
-    <div class="px-5 py-2 b-b bg-amber-2 flex flex-row justify-between">
+<body style="margin:0" class="font-sans text-amber-9"
+    _="on click if #popup do not match .hidden then send closePopover to #popup">
+    <div class="px-5 py-2 bg-amber-2 flex flex-row justify-between">
         <!-- <img src="/tt-logo.svg" alt="tt-logo" class="h-16" /> -->
         <div class="flex items-center gap-2">
             <div class="i-tabler-cards h-12 w-12"></div>
@@ -20,7 +21,7 @@
         </div>
         <div class="flex items-center gap-3">
             <div class="relative">
-                <div class="i-tabler-grid-dots text-orange-800 h-7 w-7 border-solid border-gray-600 border-1 rounded relative cursor-pointer"
+                <div class="i-tabler-grid-dots h-7 w-7 border-solid border-1 rounded relative cursor-pointer"
                     _="on click halt the event toggle .hidden on #popup">
                 </div>
                 <div id="popup" class="absolute right-0 bg-white p-4 border rounded-lg shadow-lg z-50 hidden mt-2"

@@ -17,21 +17,21 @@ import (
 
 func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 	slog.Debug("GetPermissions")
-	// permission, err := o.RbacStore.PermissionStore.FindWhere()
-	// if err != nil {
-	// 	slog.ErrorContext(ctx, "RbacStore.PermissionStore.FindWhere()", slog.String("error", err.Error()))
-	// 	_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to retrieve permissions"))
-	// 	return
-	// }
+	permissions, err := o.RbacStore.PermissionStore.FindWhere()
+	if err != nil {
+		slog.ErrorContext(ctx, "RbacStore.PermissionStore.FindWhere()", slog.String("error", err.Error()))
+		_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to retrieve permissions"))
+		return
+	}
 
 	isHx := ctx.GetHeader("HX-Request")
 	if isHx == "true" {
 		if ctx.GetHeader("Hx-Target") == "ac-contents" {
-			ctx.HTML(200, "permissions", nil)
+			ctx.HTML(200, "permissions", permissions)
 			return
 		}
 		permissionsBuf := bytes.NewBufferString("")
-		o.templates.ExecuteTemplate(permissionsBuf, "permissions", nil)
+		o.templates.ExecuteTemplate(permissionsBuf, "permissions", permissions)
 
 		ctx.HTML(200, "access_control", map[string]any{
 			"Body": template.HTML(permissionsBuf.String()),
@@ -39,7 +39,7 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 		return
 	}
 	permissionsBuf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(permissionsBuf, "permissions", nil)
+	o.templates.ExecuteTemplate(permissionsBuf, "permissions", permissions)
 	buf := bytes.NewBufferString("")
 	o.templates.ExecuteTemplate(buf, "access_control", map[string]any{
 		"Body": template.HTML(permissionsBuf.String()),
