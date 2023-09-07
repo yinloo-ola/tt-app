@@ -49,7 +49,6 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 		"App":   "Table Tennis App",
 		"Main":  template.HTML(buf.String()),
 	})
-	// ctx.HTML(http.StatusOK, permission)
 }
 
 func (o *APIAccessController) AddPermission(ctx *gin.Context) {
@@ -67,7 +66,7 @@ func (o *APIAccessController) AddPermission(ctx *gin.Context) {
 		_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to insert permission"))
 		return
 	}
-	permission.Id = id
+	permission.ID = id
 	ctx.JSON(http.StatusOK, permission)
 }
 
@@ -79,7 +78,7 @@ func (o *APIAccessController) UpdatePermission(ctx *gin.Context) {
 		_ = ctx.AbortWithError(http.StatusBadRequest, fmt.Errorf("fail to bind body to permission"))
 		return
 	}
-	err = o.RbacStore.PermissionStore.Update(permission.Id, permission)
+	err = o.RbacStore.PermissionStore.Update(permission.ID, permission)
 	if err != nil {
 		if errors.Is(err, store.ErrNotFound) {
 			slog.ErrorContext(ctx, "RbacStore.PermissionStore.Insert()", slog.String("error", err.Error()))

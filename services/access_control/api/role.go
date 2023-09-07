@@ -67,7 +67,7 @@ func (o *APIAccessController) AddRole(ctx *gin.Context) {
 		_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to insert role"))
 		return
 	}
-	role.Id = id
+	role.ID = id
 	ctx.JSON(http.StatusOK, role)
 }
 
@@ -79,7 +79,7 @@ func (o *APIAccessController) UpdateRole(ctx *gin.Context) {
 		_ = ctx.AbortWithError(http.StatusBadRequest, fmt.Errorf("fail to bind body to role"))
 		return
 	}
-	err = o.RbacStore.RoleStore.Update(role.Id, role)
+	err = o.RbacStore.RoleStore.Update(role.ID, role)
 	if err != nil {
 		if errors.Is(err, store.ErrNotFound) {
 			slog.ErrorContext(ctx, "RbacStore.RoleStore.Insert()", slog.String("error", err.Error()))

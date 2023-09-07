@@ -8,7 +8,7 @@ import (
 )
 
 type Role struct {
-	Id          int64   `db:"id,pk" json:"id"`
+	ID          int64   `db:"id,pk" json:"id"`
 	Name        string  `db:"name" json:"name"`
 	Description string  `db:"description" json:"description"`
 	Permissions []int64 `db:"permissions,json" json:"permissions"`
@@ -17,12 +17,12 @@ type Role struct {
 func (o *Role) FieldsVals() []any {
 	perms, err := json.Marshal(o.Permissions)
 	util.PanicErr(err)
-	return []any{o.Id, o.Name, o.Description, perms}
+	return []any{o.ID, o.Name, o.Description, perms}
 }
 
 func (o *Role) ScanRow(row store.RowScanner) error {
 	var perms []byte
-	err := row.Scan(&o.Id, &o.Name, &o.Description, &perms)
+	err := row.Scan(&o.ID, &o.Name, &o.Description, &perms)
 	if err != nil {
 		return err
 	}

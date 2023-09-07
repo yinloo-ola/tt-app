@@ -61,7 +61,7 @@ func TestNew(t *testing.T) {
 	if err != nil {
 		t.Fatalf("fail to insert: %v", err)
 	}
-	role.Id = id
+	role.ID = id
 	if id != 1 {
 		t.Errorf("expect role id to be 1 but gotten %v", id)
 	}
@@ -119,7 +119,7 @@ func TestNew(t *testing.T) {
 		t.Fatalf("fail to insert: %v", err)
 	}
 	fmt.Printf("insert duration: %s\n", time.Since(now))
-	role2.Id = id
+	role2.ID = id
 	if id != 2 {
 		t.Errorf("expect role id to be 1 but gotten %v", id)
 	}

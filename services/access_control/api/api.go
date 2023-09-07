@@ -6,10 +6,10 @@ import (
 	"github.com/yinloo-ola/tt-app/common/rbac/models"
 	"github.com/yinloo-ola/tt-app/util"
 	sqlitestore "github.com/yinloo-ola/tt-app/util/store/sqlite-store"
-	"github.com/yinloo-ola/tt-app/util/template_util"
+	"github.com/yinloo-ola/tt-app/util/template"
 )
 
-func AddAPIs(routerGroup *gin.RouterGroup, templates template_util.TemplateExecutor) {
+func AddAPIs(routerGroup *gin.RouterGroup, templates template.TemplateExecutor) {
 	path := "rbac.db"
 	permissionStore, err := sqlitestore.NewStore[models.Permission](path)
 	util.PanicErr(err)
@@ -37,5 +37,5 @@ func AddAPIs(routerGroup *gin.RouterGroup, templates template_util.TemplateExecu
 
 type APIAccessController struct {
 	RbacStore *rbac.Rbac
-	templates template_util.TemplateExecutor
+	templates template.TemplateExecutor
 }

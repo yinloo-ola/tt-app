@@ -20,7 +20,7 @@ type Role struct {
 	AddressPtr   *Address   `db:"addressPtr"`
 	Addresses    []Address  `db:"addresses"`
 	AddressesPtr []*Address `db:"addressesPtr"`
-	Id           int64      `db:"id,pk"`
+	ID           int64      `db:"id,pk"`
 }
 
 func (o *Role) FieldsVals() []any {
@@ -65,7 +65,7 @@ func (o *Role) FieldsVals() []any {
 		out = append(out, line)
 	}
 
-	out = append(out, o.Id)
+	out = append(out, o.ID)
 	return out
 }
 
@@ -77,7 +77,7 @@ func panicErr(err error) {
 func (o *Role) ScanRow(row store.RowScanner) error {
 	isHuman := 0
 	var permsStr, agesStr, aliasStr, pricesStr, addressStr, addressPtrStr, addressesStr, addressesPtrStr []byte
-	err := row.Scan(&o.Name, &isHuman, &permsStr, &agesStr, &aliasStr, &pricesStr, &addressStr, &addressPtrStr, &addressesStr, &addressesPtrStr, &o.Id)
+	err := row.Scan(&o.Name, &isHuman, &permsStr, &agesStr, &aliasStr, &pricesStr, &addressStr, &addressPtrStr, &addressesStr, &addressesPtrStr, &o.ID)
 	if err != nil {
 		return err
 	}

@@ -5,7 +5,7 @@ import (
 	"html/template"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yinloo-ola/tt-app/util/template_util"
+	template_util "github.com/yinloo-ola/tt-app/util/template"
 )
 
 func AddAPIs(routerGroup *gin.RouterGroup, templates template_util.TemplateExecutor) {

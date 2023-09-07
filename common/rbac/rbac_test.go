@@ -59,7 +59,7 @@ func TestParallelInsert(t *testing.T) {
 			}
 			id, err := rbac.PermissionStore.Insert(perm)
 			util.PanicErr(err)
-			perm.Id = id
+			perm.ID = id
 			permChan <- perm
 		}(&wg)
 	}
@@ -118,7 +118,7 @@ func TestRbac_HasPermission(t *testing.T) {
 			}
 			id, err := rbac.PermissionStore.Insert(perm)
 			util.PanicErr(err)
-			perm.Id = id
+			perm.ID = id
 			permChan <- perm
 		}(&wg)
 	}
@@ -137,11 +137,11 @@ func TestRbac_HasPermission(t *testing.T) {
 			Description: fmt.Sprintf("desc %d", i),
 		}
 		for j := startIndex; j < endIndex; j++ {
-			role.Permissions = append(role.Permissions, permsIn[j].Id)
+			role.Permissions = append(role.Permissions, permsIn[j].ID)
 		}
 		id, err := rbac.RoleStore.Insert(role)
 		util.PanicErr(err)
-		role.Id = id
+		role.ID = id
 		roles = append(roles, role)
 	}
 
@@ -153,11 +153,11 @@ func TestRbac_HasPermission(t *testing.T) {
 			UserID: fmt.Sprintf("userid %d", i),
 		}
 		for j := start; j < end; j++ {
-			user.Roles = append(user.Roles, roles[j].Id)
+			user.Roles = append(user.Roles, roles[j].ID)
 		}
 		id, err := rbac.UserStore.Insert(user)
 		util.PanicErr(err)
-		user.Id = id
+		user.ID = id
 		users = append(users, user)
 	}
 
@@ -166,7 +166,7 @@ func TestRbac_HasPermission(t *testing.T) {
 		end := (i + 1) * 20
 
 		for j := start; j < end; j++ {
-			hasPerm, err := rbac.HasPermission(users[i].UserID, permsIn[j].Id)
+			hasPerm, err := rbac.HasPermission(users[i].UserID, permsIn[j].ID)
 			util.PanicErr(err)
 			assert.True(hasPerm)
 		}
@@ -180,7 +180,7 @@ func TestRbac_HasPermission(t *testing.T) {
 			if j >= start && j < end {
 				continue
 			}
-			hasPerm, err := rbac.HasPermission(users[i].UserID, permsIn[j].Id)
+			hasPerm, err := rbac.HasPermission(users[i].UserID, permsIn[j].ID)
 			util.PanicErr(err)
 			assert.False(hasPerm)
 		}
@@ -234,7 +234,7 @@ func TestRbac_GetUserPermissions(t *testing.T) {
 			}
 			id, err := rbac.PermissionStore.Insert(perm)
 			util.PanicErr(err)
-			perm.Id = id
+			perm.ID = id
 			permChan <- perm
 		}(&wg)
 	}
@@ -253,11 +253,11 @@ func TestRbac_GetUserPermissions(t *testing.T) {
 			Description: fmt.Sprintf("desc %d", i),
 		}
 		for j := startIndex; j < endIndex; j++ {
-			role.Permissions = append(role.Permissions, permsIn[j].Id)
+			role.Permissions = append(role.Permissions, permsIn[j].ID)
 		}
 		id, err := rbac.RoleStore.Insert(role)
 		util.PanicErr(err)
-		role.Id = id
+		role.ID = id
 		roles = append(roles, role)
 	}
 
@@ -269,11 +269,11 @@ func TestRbac_GetUserPermissions(t *testing.T) {
 			UserID: fmt.Sprintf("userid %d", i),
 		}
 		for j := start; j < end; j++ {
-			user.Roles = append(user.Roles, roles[j].Id)
+			user.Roles = append(user.Roles, roles[j].ID)
 		}
 		id, err := rbac.UserStore.Insert(user)
 		util.PanicErr(err)
-		user.Id = id
+		user.ID = id
 		users = append(users, user)
 	}
 

@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	access_control_api "github.com/yinloo-ola/tt-app/services/access_control/api"
 	home "github.com/yinloo-ola/tt-app/services/home/api"
-	"github.com/yinloo-ola/tt-app/util/template_util"
+	"github.com/yinloo-ola/tt-app/util/template"
 	"github.com/yinloo-ola/tt-app/views"
 )
 
@@ -26,17 +26,17 @@ func main() {
 
 	env := os.Getenv("GIN_MODE")
 
-	var templateExecutor template_util.TemplateExecutor
+	var templateExecutor template.TemplateExecutor
 	if env == "debug" {
 		slog.Debug("DEV mode")
 		router.LoadHTMLGlob(views.Glob())
-		templateExecutor = &template_util.DebugTemplateExecutor{
+		templateExecutor = &template.DebugTemplateExecutor{
 			Glob: views.Glob(),
 		}
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 		router.SetHTMLTemplate(views.ParseFS())
-		templateExecutor = &template_util.ReleaseTemplateExecutor{
+		templateExecutor = &template.ReleaseTemplateExecutor{
 			Template: views.ParseGlob(),
 		}
 	}
