@@ -1,24 +1,24 @@
 {{- define "permission_row" -}}
 <div
-  class="flex flex-col pt-4 pb-6 px-6 hover:shadow-lg bg-amber-1 gap-4 transition duration-150 ease-in-out"
+  class="flex flex-col gap-4 bg-amber-1 px-6 pb-6 pt-4 transition duration-150 ease-in-out hover:shadow-lg"
 >
-  <div class="text-xl font-extrabold">{{.Name}}</div>
+  <div class="font-extrabold text-xl">{{.Name}}</div>
   <div class="flex items-center gap-2">
-    <div class="i-tabler-file-description h-5 w-5"></div>
+    <div class="w-5 h-5 i-tabler-file-description"></div>
     {{.Description}}
   </div>
   <div class="flex gap-4">
     <button
       type="button"
-      class="bg-transparent hover:bg-amber-8 text-amber-8 border-2 border-solid border-amber-8 font-semibold hover:text-white p-2 active:bg-amber-7  hover:border-transparent rounded-lg"
+      class="border-amber-8 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-amber-8 hover:bg-amber-8 hover:text-white active:bg-amber-7 hover:border-transparent"
     >
-      <div class="i-tabler-edit w-4 h-4"></div>
+      <div class="h-4 w-4 i-tabler-edit"></div>
     </button>
     <button
       type="button"
-      class="bg-transparent hover:bg-amber-8 text-amber-8 border-2 border-solid border-amber-8 font-semibold hover:text-white p-2 active:bg-amber-7  hover:border-transparent rounded-lg"
+      class="border-amber-8 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-amber-8 hover:bg-amber-8 hover:text-white active:bg-amber-7 hover:border-transparent"
     >
-      <div class="i-tabler-trash w-4 h-4"></div>
+      <div class="h-4 w-4 i-tabler-trash"></div>
     </button>
   </div>
 </div>

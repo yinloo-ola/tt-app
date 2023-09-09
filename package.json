@@ -4,6 +4,8 @@
     "build": "unocss \"views/pages/**/*.html\" -o \"views/assets/uno.css\""
   },
   "devDependencies": {
+    "@alexanderniebuhr/prettier-config": "^1.4.0",
+    "@alexanderniebuhr/prettier-plugin-unocss": "^0.0.1",
     "@iconify-json/tabler": "^1.1.89",
     "@unocss/cli": "^0.55.3",
     "@unocss/preset-icons": "^0.55.3",
