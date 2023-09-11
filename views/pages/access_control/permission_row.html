@@ -1,22 +1,28 @@
 {{- define "permission_row" -}}
 <div
-  class="flex flex-col gap-4 bg-amber-1 px-6 pb-6 pt-4 transition duration-150 ease-in-out hover:shadow-lg"
+  id="permission-row-{{.ID}}"
+  _="on removePermission[id=={{.ID}}] remove me"
+  class="flex flex-col gap-4 bg-amber-1 px-4 pb-6 pt-4 transition duration-150 ease-in-out hover:shadow-lg"
 >
-  <div class="font-extrabold text-xl">{{.Name}}</div>
-  <div class="flex items-center gap-2">
+  <div class="font-extrabold text-lg">{{.Name}}</div>
+  <div class="flex items-center gap-2 pb-2">
     <div class="w-5 h-5 i-tabler-file-description"></div>
     {{.Description}}
   </div>
   <div class="flex gap-4">
     <button
+      hx-get="/access_control/permission_modal?id={{.ID}}&actionType=update"
+      hx-target="#permission-modal"
+      _="on htmx:afterOnLoad trigger toggleModal on #permission-modal"
       type="button"
-      class="border-amber-8 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-amber-8 hover:bg-amber-8 hover:text-white active:bg-amber-7 hover:border-transparent"
+      class="border-sky-7 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-sky-7 hover:bg-sky-7 hover:text-white active:bg-sky-6 hover:border-transparent"
     >
       <div class="h-4 w-4 i-tabler-edit"></div>
     </button>
     <button
+      _="on click trigger toggleModal on #delete-permission-modal then trigger setPermission(permission:{Name:'{{.Name}}',ID:{{.ID}}}) on #delete-permission-confirm"
       type="button"
-      class="border-amber-8 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-amber-8 hover:bg-amber-8 hover:text-white active:bg-amber-7 hover:border-transparent"
+      class="border-red-6 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-red-6 hover:bg-red-6 hover:text-white active:bg-red-5 hover:border-transparent"
     >
       <div class="h-4 w-4 i-tabler-trash"></div>
     </button>

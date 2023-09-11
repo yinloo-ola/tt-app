@@ -1,0 +1,9 @@
+{{- define "modal" -}}
+<div
+  id="{{.ElementID}}"
+  class="fixed inset-0 z-48 hidden flex-col items-center bg-gray-9/50 transition duration-150 ease-in-out"
+  _="on toggleModal toggle .flex .hidden"
+>
+{{.Body}}
+</div>
+{{- end -}}

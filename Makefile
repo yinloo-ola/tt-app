@@ -57,4 +57,4 @@ run: build
 ## run/live: run the application with reloading on file changes
 .PHONY: run/live
 run/live:
-	go run github.com/cosmtrek/air@v1.43.0 & npm run dev
+	go run github.com/cosmtrek/air@v1.43.0 & bun run dev

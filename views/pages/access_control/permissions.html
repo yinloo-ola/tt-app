@@ -1,7 +1,25 @@
-{{define "permissions" -}}
-<div class="grid grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-2">
-    {{- range .}}
-        {{- template "permission_row" .}}
-    {{end -}}
+{{- define "permissions" -}}
+<div class="w-full flex flex-col gap-4">
+  <div class="flex justify-end">
+    <button
+      _="on click trigger toggleModal on #new-permission-modal"
+      type="button"
+      class="border-2 border-emerald-7 rounded-lg border-solid bg-transparent p-2 font-semibold text-emerald-7 hover:bg-emerald-7 hover:text-white active:bg-emerald-6 hover:border-transparent"
+    >
+      <div class="flex gap-1">
+        <div class="w-4 h-4 i-tabler-square-plus"></div>
+        Add
+      </div>
+    </button>
+  </div>
+  <div
+    id="permission-list"
+    class="grid grid-flow-row grid-cols-1 w-full gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+  >
+    {{- range .Permissions}} {{- template "permission_row" .}} {{end -}}
+  </div>
 </div>
-{{- end}}
+{{- block "modal" .NewPermissionModal -}} {{- end -}}
+{{- block "modal" .DeletePermissionModal -}} {{- end -}}
+<!-- {{- block "modal" .UpdatePermission -}} {{- end -}}  -->
+{{- end -}}

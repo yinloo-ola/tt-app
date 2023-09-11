@@ -32,7 +32,7 @@ func (o *APIAccessController) GetRoles(ctx *gin.Context) {
 		rolesBuf := bytes.NewBufferString("")
 		o.templates.ExecuteTemplate(rolesBuf, "roles", nil)
 
-		ctx.HTML(200, "access_control", map[string]any{
+		ctx.HTML(200, "access_control", gin.H{
 			"Body": template.HTML(rolesBuf.String()),
 		})
 		return
@@ -40,10 +40,10 @@ func (o *APIAccessController) GetRoles(ctx *gin.Context) {
 	rolesBuf := bytes.NewBufferString("")
 	o.templates.ExecuteTemplate(rolesBuf, "roles", nil)
 	buf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(buf, "access_control", map[string]any{
+	o.templates.ExecuteTemplate(buf, "access_control", gin.H{
 		"Body": template.HTML(rolesBuf.String()),
 	})
-	ctx.HTML(200, "base", map[string]any{
+	ctx.HTML(200, "base", gin.H{
 		"Title": "TT App - Access Control",
 		"App":   "Table Tennis App",
 		"Main":  template.HTML(buf.String()),

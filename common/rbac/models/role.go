@@ -8,10 +8,10 @@ import (
 )
 
 type Role struct {
-	ID          int64   `db:"id,pk" json:"id"`
-	Name        string  `db:"name" json:"name"`
-	Description string  `db:"description" json:"description"`
-	Permissions []int64 `db:"permissions,json" json:"permissions"`
+	ID          int64   `db:"id,pk" form:"id"`
+	Name        string  `db:"name" form:"name"`
+	Description string  `db:"description" form:"description"`
+	Permissions []int64 `db:"permissions,json" form:"permissions"`
 }
 
 func (o *Role) FieldsVals() []any {

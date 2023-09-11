@@ -21,7 +21,7 @@ func (o *APIHomeController) Index(c *gin.Context) {
 	buf := bytes.NewBufferString("")
 	o.templates.ExecuteTemplate(buf, "home", nil)
 
-	c.HTML(200, "base", map[string]any{
+	c.HTML(200, "base", gin.H{
 		"Title": "Table Tennis App",
 		"App":   "Table Tennis App",
 		"Main":  template.HTML(buf.String()),
