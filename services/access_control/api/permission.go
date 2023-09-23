@@ -28,20 +28,14 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 	o.templates.ExecuteTemplate(newPermissionsBuf, "new_permission_modal", gin.H{
 		"PermissionID": 123,
 	})
-	deletePermissionsBuf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(deletePermissionsBuf, "delete_permission_modal", gin.H{})
+
 	permissionsContent := gin.H{
 		"Permissions": permissions,
 		"NewPermissionModal": gin.H{
 			"ElementID": "new-permission-modal",
 			"Body":      template.HTML(newPermissionsBuf.String()),
 		},
-		"DeletePermissionModal": gin.H{
-			"ElementID": "delete-permission-modal",
-			"Body":      template.HTML(deletePermissionsBuf.String()),
-		},
 	}
-	slog.Debug("permissionContent", "content", permissionsContent)
 
 	isHx := ctx.GetHeader("HX-Request")
 	if isHx == "true" {

@@ -2,23 +2,24 @@
 <div
   id="ac-tabs"
   hx-target="#ac-contents"
-  _="on htmx:afterOnLoad set @aria-selected of <[aria-selected=true]/> to false tell the target take .bg-amber-3 set @aria-selected to true"
   class="m-4 h-full flex flex-col divide-gray-300 divide-y divide-x-0 divide-solid rounded-md bg-gray-100 shadow-md"
 >
   <div class="flex flex-row gap-2 rounded-t-md p-4">
     <div
       hx-get="/access_control/users"
       aria-controls="tab-content"
-      aria-selected="true"
+      aria-selected="false"
       class="tab-pill"
+      _="on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent <div/> set @aria-selected of <[aria-selected=true]/> in the closest parent <div/> to false set my @aria-selected to true"
     >
       Users
     </div>
     <div
       hx-get="/access_control/roles"
       aria-controls="tab-content"
-      aria-selected="true"
+      aria-selected="false"
       class="tab-pill"
+      _="on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent <div/> set @aria-selected of <[aria-selected=true]/> in the closest parent <div/> to false set my @aria-selected to true"
     >
       Roles
     </div>
@@ -27,6 +28,7 @@
       aria-controls="tab-content"
       aria-selected="true"
       class="bg-amber-3 tab-pill"
+      _="on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent <div/> set @aria-selected of <[aria-selected=true]/> in the closest parent <div/> to false set my @aria-selected to true"
     >
       Permissions
     </div>
