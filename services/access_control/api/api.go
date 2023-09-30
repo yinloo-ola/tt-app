@@ -27,6 +27,7 @@ func AddAPIs(routerGroup *gin.RouterGroup, templates template.TemplateExecutor) 
 	routerGroup.GET("/permissions", ctrl.GetPermissions)
 	routerGroup.POST("/permissions", ctrl.AddPermission)
 	routerGroup.PUT("/permissions", ctrl.UpdatePermission)
+	routerGroup.GET("/permission_modal", ctrl.PermissionModal)
 	routerGroup.DELETE("/permissions/:id", ctrl.DeletePermission)
 
 	routerGroup.GET("/roles", ctrl.GetRoles)

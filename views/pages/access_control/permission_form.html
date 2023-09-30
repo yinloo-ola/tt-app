@@ -1,28 +1,42 @@
 {{- define "permission_form" -}}
 <form
-  hx-post="/access_control/permissions"
+  hx-{{- if eq .Action "new" -}}post{{- else if eq .Action "update" -}}put{{- end -}}="/access_control/permissions"
+{{- if eq .Action "new" -}}
   hx-target="#permission-list"
-  hx-swap="afterbegin"
-  _="on htmx:afterOnLoad trigger toggleModal reset() me"
-  class="flex flex-col gap-4"
->
+  hx-swap="afterbegin"  
+{{- else if eq .Action "update" -}}
+  hx-target="#permission-row-{{.ID}}"
+  hx-swap="outerHTML"
+{{- end -}}
+  _="on htmx:afterOnLoad trigger toggleModal() reset() me"
+  class="flex flex-col gap-4">
   <div class="flex flex-col">
-    <label for="permission" class="mb-2 block text-sm text-amber-9">Permission</label>
+    <input
+      type="text"
+      id="id"
+      name="id"
+      value="{{.ID}}"
+      class="hidden border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+      required
+    />
+    <label for="permission" class="mb-2 block text-amber-9 text-sm">Permission</label>
     <input
       type="text"
       id="permission"
       name="name"
-      class="border rounded-lg border-solid px-4 py-2 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+      value="{{.Name}}"
+      class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
       required
     />
   </div>
   <div class="flex flex-col">
-    <label for="description" class="mb-2 block text-sm text-amber-9">Description</label>
+    <label for="description" class="mb-2 block text-amber-9 text-sm">Description</label>
     <input
       type="text"
       id="description"
       name="description"
-      class="border rounded-lg border-solid px-4 py-2 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+      value="{{.Description}}"
+      class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
       required
     />
   </div>
@@ -36,7 +50,7 @@
     </button>
     <button
       type="submit"
-      class="border-2 border-emerald-7 rounded-lg border-solid bg-transparent p-2 font-semibold text-emerald-7 hover:bg-emerald-7 hover:text-white active:bg-emerald-6 hover:border-transparent"
+      class="border-emerald-7 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-emerald-7 hover:bg-emerald-7 hover:text-white active:bg-emerald-6 hover:border-transparent"
     >
       <div>Submit</div>
     </button>

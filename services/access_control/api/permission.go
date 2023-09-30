@@ -15,6 +15,41 @@ import (
 	"github.com/yinloo-ola/tt-app/util/store"
 )
 
+func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
+	slog.Debug("PermissionModal")
+	permissionIDStr, _ := ctx.GetQuery("id")
+	permissionID, err := strconv.ParseInt(permissionIDStr, 10, 64)
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, errors.New("invalid id"))
+		return
+	}
+	actionType, _ := ctx.GetQuery("actionType")
+	slog.Info("PermissionModal", "id", permissionID, "actionType", actionType)
+	permission, err := o.RbacStore.PermissionStore.GetOne(permissionID)
+	if err != nil {
+		if errors.Is(err, store.ErrNotFound) {
+			ctx.AbortWithError(http.StatusNotFound, fmt.Errorf("permission not found: %d", permissionID))
+			return
+		}
+		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("failed to retrieve permission: %d. Error: %v", permissionID, err))
+		return
+	}
+
+	newPermissionsBuf := bytes.NewBufferString("")
+	o.templates.ExecuteTemplate(newPermissionsBuf, "permission_modal", gin.H{
+		"Action":      "update",
+		"Name":        permission.Name,
+		"Description": permission.Description,
+		"ID":          permission.ID,
+	})
+
+	ctx.HTML(200, "modal_once", gin.H{
+		"IsHidden":  false,
+		"ElementID": "update-permission-modal",
+		"Body":      template.HTML(newPermissionsBuf.String()),
+	})
+}
+
 func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 	slog.Debug("GetPermissions")
 	permissions, err := o.RbacStore.PermissionStore.FindWhere()
@@ -25,13 +60,14 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 	}
 
 	newPermissionsBuf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(newPermissionsBuf, "new_permission_modal", gin.H{
-		"PermissionID": 123,
+	o.templates.ExecuteTemplate(newPermissionsBuf, "permission_modal", gin.H{
+		"Action": "new",
 	})
 
 	permissionsContent := gin.H{
 		"Permissions": permissions,
 		"NewPermissionModal": gin.H{
+			"IsHidden":  true,
 			"ElementID": "new-permission-modal",
 			"Body":      template.HTML(newPermissionsBuf.String()),
 		},
@@ -86,23 +122,25 @@ func (o *APIAccessController) AddPermission(ctx *gin.Context) {
 
 func (o *APIAccessController) UpdatePermission(ctx *gin.Context) {
 	var permission models.Permission
-	err := ctx.BindJSON(&permission)
+	err := ctx.Bind(&permission)
 	if err != nil {
 		slog.ErrorContext(ctx, "ctx.BindJSON()", slog.String("error", err.Error()))
 		_ = ctx.AbortWithError(http.StatusBadRequest, fmt.Errorf("fail to bind body to permission"))
 		return
 	}
+	slog.Debug("update permission", "permission", permission)
 	err = o.RbacStore.PermissionStore.Update(permission.ID, permission)
 	if err != nil {
 		if errors.Is(err, store.ErrNotFound) {
-			slog.ErrorContext(ctx, "RbacStore.PermissionStore.Insert()", slog.String("error", err.Error()))
+			slog.ErrorContext(ctx, "RbacStore.PermissionStore.Update()", slog.String("error", err.Error()))
 			_ = ctx.AbortWithError(http.StatusBadRequest, fmt.Errorf("permission not found"))
 			return
 		}
-		slog.ErrorContext(ctx, "RbacStore.PermissionStore.Insert()", slog.String("error", err.Error()))
+		slog.ErrorContext(ctx, "RbacStore.PermissionStore.Update()", slog.String("error", err.Error()))
 		_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to insert permission"))
 		return
 	}
+	ctx.HTML(200, "permission_row", permission)
 }
 
 func (o *APIAccessController) DeletePermission(ctx *gin.Context) {

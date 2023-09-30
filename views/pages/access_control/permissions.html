@@ -19,6 +19,6 @@
     {{- range .Permissions}} {{- template "permission_row" .}} {{end -}}
   </div>
 </div>
-{{- block "modal" .NewPermissionModal -}} {{- end -}}
-<!-- {{- block "modal" .UpdatePermission -}} {{- end -}}  -->
+<div id="update-permission-modal" class="hidden"></div>
+{{- block "modal_persistent" .NewPermissionModal -}} {{- end -}}
 {{- end -}}

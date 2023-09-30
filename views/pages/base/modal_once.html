@@ -1,8 +1,8 @@
-{{- define "modal_persistent" -}}
+{{- define "modal_once" -}}
 <div
   id="{{.ElementID}}"
   class="fixed inset-0 z-48 {{if .IsHidden}}hidden{{else}}flex{{end}} flex-col items-center bg-gray-9/50 transition duration-150 ease-in-out"
-  _="on toggleModal toggle .flex .hidden"
+  _="on toggleModal toggle .flex .hidden then remove <div/> in me"
 >
 <div class="-z-1 absolute inset-0" _="on click trigger toggleModal"></div>
 {{.Body}}

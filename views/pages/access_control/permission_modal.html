@@ -1,0 +1,9 @@
+{{- define "permission_modal" -}}
+<div class="-translate-y-50% relative top-50% w-75% rounded-lg bg-amber-1 p-4">
+  <h3>
+    {{- if eq .Action "new" -}} Add New Permission {{- else if eq .Action "update" -}} Update
+    Permission {{- end -}}
+  </h3>
+  {{- template "permission_form" . -}}
+</div>
+{{- end -}}
