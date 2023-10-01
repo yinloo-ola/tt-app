@@ -1,10 +1,8 @@
 package api
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"html/template"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -24,7 +22,7 @@ func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
 		return
 	}
 	actionType, _ := ctx.GetQuery("actionType")
-	slog.Info("PermissionModal", "id", permissionID, "actionType", actionType)
+	slog.Debug("PermissionModal", "id", permissionID, "actionType", actionType)
 	permission, err := o.RbacStore.PermissionStore.GetOne(permissionID)
 	if err != nil {
 		if errors.Is(err, store.ErrNotFound) {
@@ -35,18 +33,15 @@ func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
 		return
 	}
 
-	newPermissionsBuf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(newPermissionsBuf, "permission_modal", gin.H{
-		"Action":      "update",
-		"Name":        permission.Name,
-		"Description": permission.Description,
-		"ID":          permission.ID,
-	})
-
 	ctx.HTML(200, "modal_once", gin.H{
 		"IsHidden":  false,
 		"ElementID": "update-permission-modal",
-		"Body":      template.HTML(newPermissionsBuf.String()),
+		"Body": o.templates.TemplateHTML("permission_modal", gin.H{
+			"Action":      "update",
+			"Name":        permission.Name,
+			"Description": permission.Description,
+			"ID":          permission.ID,
+		}),
 	})
 }
 
@@ -59,17 +54,14 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 		return
 	}
 
-	newPermissionsBuf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(newPermissionsBuf, "permission_modal", gin.H{
-		"Action": "new",
-	})
-
 	permissionsContent := gin.H{
 		"Permissions": permissions,
 		"NewPermissionModal": gin.H{
 			"IsHidden":  true,
 			"ElementID": "new-permission-modal",
-			"Body":      template.HTML(newPermissionsBuf.String()),
+			"Body": o.templates.TemplateHTML("permission_modal", gin.H{
+				"Action": "new",
+			}),
 		},
 	}
 
@@ -79,24 +71,18 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 			ctx.HTML(200, "permissions", permissionsContent)
 			return
 		}
-		permissionsBuf := bytes.NewBufferString("")
-		o.templates.ExecuteTemplate(permissionsBuf, "permissions", permissionsContent)
-
 		ctx.HTML(200, "access_control", gin.H{
-			"Body": template.HTML(permissionsBuf.String()),
+			"Body": o.templates.TemplateHTML("permissions", permissionsContent),
 		})
 		return
 	}
-	permissionsBuf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(permissionsBuf, "permissions", permissionsContent)
-	buf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(buf, "access_control", gin.H{
-		"Body": template.HTML(permissionsBuf.String()),
-	})
+
 	ctx.HTML(200, "base", gin.H{
 		"Title": "TT App - Access Control",
 		"App":   "Table Tennis App",
-		"Main":  template.HTML(buf.String()),
+		"Main": o.templates.TemplateHTML("access_control", gin.H{
+			"Body": o.templates.TemplateHTML("permissions", permissionsContent),
+		}),
 	})
 }
 

@@ -17,7 +17,7 @@
       name="id"
       value="{{.ID}}"
       class="hidden border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
-      required
+      {{- if eq .Action "update" -}}required{{- end -}}
     />
     <label for="permission" class="mb-2 block text-amber-9 text-sm">Permission</label>
     <input

@@ -29,15 +29,15 @@ func main() {
 	var templateExecutor template.TemplateExecutor
 	if env == "debug" {
 		slog.Debug("DEV mode")
-		router.LoadHTMLGlob(views.Glob())
+		router.LoadHTMLFiles(views.GetFiles()...)
 		templateExecutor = &template.DebugTemplateExecutor{
-			Glob: views.Glob(),
+			Engine: router,
 		}
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 		router.SetHTMLTemplate(views.ParseFS())
 		templateExecutor = &template.ReleaseTemplateExecutor{
-			Template: views.ParseGlob(),
+			Template: views.ParseFS(),
 		}
 	}
 
