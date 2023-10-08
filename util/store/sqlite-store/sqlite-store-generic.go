@@ -8,7 +8,9 @@ import (
 	"strings"
 	"sync"
 
+	"modernc.org/sqlite"
 	_ "modernc.org/sqlite"
+	sqlite3 "modernc.org/sqlite/lib"
 
 	"github.com/yinloo-ola/tt-app/util/store"
 )
@@ -133,6 +135,9 @@ func (o *SQliteStore[T, R]) Insert(obj T) (int64, error) {
 
 	res, err := o.insertStmt.Exec(values...)
 	if err != nil {
+		if isDupError(err) {
+			return 0, store.ErrConflicted
+		}
 		return 0, fmt.Errorf("%s insert failed: %w", o.tablename, err)
 	}
 
@@ -160,6 +165,9 @@ func (o *SQliteStore[T, R]) Update(id int64, obj T) error {
 
 	res, err := o.updateStmt.Exec(values...)
 	if err != nil {
+		if isDupError(err) {
+			return store.ErrConflicted
+		}
 		return fmt.Errorf("%s update failed: %w", o.tablename, err)
 	}
 
@@ -293,4 +301,14 @@ func (o *SQliteStore[T, R]) FindWhere(conds ...store.Cond) ([]T, error) {
 
 func (o *SQliteStore[T, R]) Close() error {
 	return o.db.Close()
+}
+
+func isDupError(err error) bool {
+	if liteErr, ok := err.(*sqlite.Error); ok {
+		code := liteErr.Code()
+		if code == sqlite3.SQLITE_CONSTRAINT_PRIMARYKEY || code == sqlite3.SQLITE_CONSTRAINT_UNIQUE {
+			return true
+		}
+	}
+	return false
 }

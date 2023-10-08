@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"html/template"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -99,6 +100,15 @@ func (o *APIAccessController) AddPermission(ctx *gin.Context) {
 	id, err := o.RbacStore.PermissionStore.Insert(permission)
 	if err != nil {
 		slog.ErrorContext(ctx, "RbacStore.PermissionStore.Insert()", slog.String("error", err.Error()))
+		if errors.Is(err, store.ErrConflicted) {
+
+			ctx.HTML(409, "error", gin.H{
+				"ElementID": "permission-form-error",
+				"Body":      template.HTML("Permission with the same name exists"),
+			})
+			ctx.Header("HX-Retarget", "#permission-form-error")
+			return
+		}
 		_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to insert permission"))
 		return
 	}
@@ -120,6 +130,13 @@ func (o *APIAccessController) UpdatePermission(ctx *gin.Context) {
 		if errors.Is(err, store.ErrNotFound) {
 			slog.ErrorContext(ctx, "RbacStore.PermissionStore.Update()", slog.String("error", err.Error()))
 			_ = ctx.AbortWithError(http.StatusBadRequest, fmt.Errorf("permission not found"))
+			return
+		}
+		if errors.Is(err, store.ErrConflicted) {
+			ctx.HTML(409, "error", gin.H{
+				"ElementID": "permission-form-error",
+				"Body":      template.HTML("Permission with the same name exists"),
+			})
 			return
 		}
 		slog.ErrorContext(ctx, "RbacStore.PermissionStore.Update()", slog.String("error", err.Error()))

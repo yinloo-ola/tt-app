@@ -4,7 +4,7 @@ import "github.com/yinloo-ola/tt-app/util/store"
 
 type Permission struct {
 	ID          int64  `db:"id,pk" form:"id"`
-	Name        string `db:"name" form:"name"`
+	Name        string `db:"name,idx_asc,uniq" form:"name"`
 	Description string `db:"description" form:"description"`
 }
 

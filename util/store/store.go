@@ -79,3 +79,4 @@ type Store[T any, R Row[T]] interface {
 }
 
 var ErrNotFound error = errors.New("record not found")
+var ErrConflicted error = errors.New("record violated unique constraint")

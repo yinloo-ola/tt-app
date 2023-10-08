@@ -3,12 +3,12 @@
   hx-{{- if eq .Action "new" -}}post{{- else if eq .Action "update" -}}put{{- end -}}="/access_control/permissions"
 {{- if eq .Action "new" -}}
   hx-target="#permission-list"
-  hx-swap="afterbegin"  
+  hx-swap="afterbegin transition:true"  
 {{- else if eq .Action "update" -}}
   hx-target="#permission-row-{{.ID}}"
-  hx-swap="outerHTML"
+  hx-swap="outerHTML transition:true"
 {{- end -}}
-  _="on htmx:afterOnLoad trigger toggleModal() reset() me"
+  _="on htmx:afterOnLoad[successful] trigger toggleModal() reset() me"
   class="flex flex-col gap-4">
   <div class="flex flex-col">
     <input
@@ -40,6 +40,7 @@
       required
     />
   </div>
+  <div id="permission-form-error">error div</div>
   <div class="flex justify-end gap-4 py-2">
     <button
       _="on click reset() the closest <form/> then trigger toggleModal"

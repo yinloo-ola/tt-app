@@ -9,7 +9,7 @@ import (
 
 type Role struct {
 	ID          int64   `db:"id,pk" form:"id"`
-	Name        string  `db:"name" form:"name"`
+	Name        string  `db:"name,idx_asc,uniq" form:"name"`
 	Description string  `db:"description" form:"description"`
 	Permissions []int64 `db:"permissions,json" form:"permissions"`
 }
