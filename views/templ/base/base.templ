@@ -1,0 +1,68 @@
+package base
+
+templ Base(title, app string, main templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title }</title>
+			<link rel="stylesheet" type="text/css" href="/uno.css"/>
+			<link rel="icon" href="/tt-logo.svg"/>
+			<script src="https://unpkg.com/htmx.org/dist/htmx.min.js" defer></script>
+			<script src="https://unpkg.com/hyperscript.org@0.9.11" defer></script>
+			<script src="/event.js" defer></script>
+		</head>
+		<body
+			style="margin:0"
+			class="font-sans text-amber-9"
+			_="on click if #popup do not match .hidden then send closePopover to #popup"
+		>
+			<div class="px-5 py-2 flex flex-row justify-between">
+				<!-- <img src="/tt-logo.svg" alt="tt-logo" class="h-16" /> -->
+				<div class="flex items-center gap-2">
+					<div class="i-tabler-cards h-12 w-12"></div>
+					<div>{ app }</div>
+				</div>
+				<div class="flex items-center gap-4">
+					<a
+						class="no-underline hover:underline"
+						href="/login"
+						hx-trigger="click"
+						hx-get="/login"
+						hx-target="main"
+						hx-push-url="/login"
+					>Login</a>
+					<div class="relative">
+						<div
+							class="i-tabler-grid-dots h-7 w-7 border-solid border-1 rounded relative cursor-pointer"
+							_="on click halt the event toggle .hidden on #popup"
+						></div>
+						<div
+							id="popup"
+							class="absolute right-0 bg-white p-4 border border-none rounded-lg shadow-lg z-50 hidden mt-2"
+							_="on closePopover add .hidden"
+						>
+							<div class="flex flex-col items-center gap-4 px-2 w-16">
+								<a
+									class="no-underline hover:underline"
+									href="/access_control/permissions"
+									hx-trigger="click"
+									hx-get="/access_control/permissions"
+									hx-target="main"
+									hx-push-url="/access_control/permissions"
+								>Permissions</a>
+								<!--
+                            add more links here
+                        -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<main id="main" class="">
+				@main
+			</main>
+		</body>
+	</html>
+}

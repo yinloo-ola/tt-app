@@ -1,0 +1,28 @@
+package permission
+
+templ Permissions(permissionRows []templ.Component, newPermissionModal templ.Component) {
+	<div class="w-full flex flex-col gap-4">
+		<div class="flex justify-end">
+			<button
+				_="on click trigger toggleModal on #new-permission-modal"
+				type="button"
+				class="border-2 border-emerald-7 rounded-lg border-solid bg-transparent p-2 font-semibold text-emerald-7 hover:bg-emerald-7 hover:text-white active:bg-emerald-6 hover:border-transparent"
+			>
+				<div class="flex gap-1">
+					<div class="w-4 h-4 i-tabler-square-plus"></div>
+					Add
+				</div>
+			</button>
+		</div>
+		<div
+			id="permission-list"
+			class="grid grid-flow-row grid-cols-1 w-full gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+		>
+			for _, permissionRow := range permissionRows {
+				@permissionRow
+			}
+		</div>
+	</div>
+	<div id="update-permission-modal" class="hidden"></div>
+	@newPermissionModal
+}

@@ -1,0 +1,80 @@
+package permission
+
+import (
+	"strconv"
+	"fmt"
+)
+
+func hxAction(action string, id int64) templ.Attributes {
+	if action == "new" {
+		return templ.Attributes{
+			"hx-post":   "/access_control/permissions",
+			"hx-target": "#permission-list",
+			"hx-swap":   "outerHTML transition:true",
+		}
+	} else if action == "update" {
+		return templ.Attributes{
+			"hx-put":    "/access_control/permissions",
+			"hx-target": fmt.Sprintf("#permission-row-%d", id),
+			"hx-swap":   "outerHTML transition:true",
+		}
+	}
+	return templ.Attributes{}
+}
+
+templ PermissionForm(action string, id int64, name, description string) {
+	<form
+		{ hxAction(action, id)... }
+		_="on htmx:afterRequest[successful] trigger toggleModal() reset() me"
+		class="flex flex-col gap-4"
+	>
+		<div class="flex flex-col">
+			<input
+				type="text"
+				id="id"
+				name="id"
+				value={ strconv.Itoa(int(id)) }
+				class="hidden border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+				if action =="update" {
+					required
+				}
+			/>
+			<label for="permission" class="mb-2 block text-amber-9 text-sm">Permission</label>
+			<input
+				type="text"
+				id="permission"
+				name="name"
+				value={ name }
+				class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+				required
+			/>
+		</div>
+		<div class="flex flex-col">
+			<label for="description" class="mb-2 block text-amber-9 text-sm">Description</label>
+			<input
+				type="text"
+				id="description"
+				name="description"
+				value={ description }
+				class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+				required
+			/>
+		</div>
+		<div id="permission-form-error"></div>
+		<div class="flex justify-end gap-4 py-2">
+			<button
+				_="on click reset() the closest <form/> then trigger toggleModal"
+				type="button"
+				class="rounded-lg border-none bg-transparent p-2 font-semibold text-amber-7 hover:bg-amber-7 hover:text-white active:bg-amber-6 hover:border-transparent"
+			>
+				<div>Cancel</div>
+			</button>
+			<button
+				type="submit"
+				class="border-emerald-7 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-emerald-7 hover:bg-emerald-7 hover:text-white active:bg-emerald-6 hover:border-transparent"
+			>
+				<div>Submit</div>
+			</button>
+		</div>
+	</form>
+}

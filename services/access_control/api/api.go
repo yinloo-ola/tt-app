@@ -6,10 +6,9 @@ import (
 	"github.com/yinloo-ola/tt-app/common/rbac/models"
 	"github.com/yinloo-ola/tt-app/util"
 	sqlitestore "github.com/yinloo-ola/tt-app/util/store/sqlite-store"
-	"github.com/yinloo-ola/tt-app/util/template"
 )
 
-func AddAPIs(routerGroup *gin.RouterGroup, templates template.TemplateExecutor) {
+func AddAPIs(routerGroup *gin.RouterGroup) {
 	path := "rbac.db"
 	permissionStore, err := sqlitestore.NewStore[models.Permission](path)
 	util.PanicErr(err)
@@ -22,7 +21,6 @@ func AddAPIs(routerGroup *gin.RouterGroup, templates template.TemplateExecutor) 
 	)
 	ctrl := &APIAccessController{
 		RbacStore: rbacStore,
-		templates: templates,
 	}
 	routerGroup.GET("/permissions", ctrl.GetPermissions)
 	routerGroup.POST("/permissions", ctrl.AddPermission)
@@ -30,13 +28,12 @@ func AddAPIs(routerGroup *gin.RouterGroup, templates template.TemplateExecutor) 
 	routerGroup.GET("/permission_modal", ctrl.PermissionModal)
 	routerGroup.DELETE("/permissions/:id", ctrl.DeletePermission)
 
-	routerGroup.GET("/roles", ctrl.GetRoles)
-	routerGroup.POST("/roles", ctrl.AddRole)
-	routerGroup.PUT("/roles", ctrl.UpdateRole)
-	routerGroup.DELETE("/roles/:id", ctrl.DeleteRole)
+	// routerGroup.GET("/roles", ctrl.GetRoles)
+	// routerGroup.POST("/roles", ctrl.AddRole)
+	// routerGroup.PUT("/roles", ctrl.UpdateRole)
+	// routerGroup.DELETE("/roles/:id", ctrl.DeleteRole)
 }
 
 type APIAccessController struct {
 	RbacStore *rbac.Rbac
-	templates template.TemplateExecutor
 }

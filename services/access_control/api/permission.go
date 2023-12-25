@@ -3,15 +3,17 @@ package api
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"log/slog"
 	"net/http"
 	"strconv"
 
+	"github.com/a-h/templ"
 	"github.com/gin-gonic/gin"
 	"github.com/yinloo-ola/tt-app/common/rbac/models"
-
 	"github.com/yinloo-ola/tt-app/util/store"
+	"github.com/yinloo-ola/tt-app/views/templ/access_control"
+	"github.com/yinloo-ola/tt-app/views/templ/access_control/permission"
+	"github.com/yinloo-ola/tt-app/views/templ/base"
 )
 
 func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
@@ -24,7 +26,7 @@ func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
 	}
 	actionType, _ := ctx.GetQuery("actionType")
 	slog.Debug("PermissionModal", "id", permissionID, "actionType", actionType)
-	permission, err := o.RbacStore.PermissionStore.GetOne(permissionID)
+	perm, err := o.RbacStore.PermissionStore.GetOne(permissionID)
 	if err != nil {
 		if errors.Is(err, store.ErrNotFound) {
 			ctx.AbortWithError(http.StatusNotFound, fmt.Errorf("permission not found: %d", permissionID))
@@ -34,16 +36,8 @@ func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
 		return
 	}
 
-	ctx.HTML(200, "modal_once", gin.H{
-		"IsHidden":  false,
-		"ElementID": "update-permission-modal",
-		"Body": o.templates.TemplateHTML("permission_modal", gin.H{
-			"Action":      "update",
-			"Name":        permission.Name,
-			"Description": permission.Description,
-			"ID":          permission.ID,
-		}),
-	})
+	ctx.HTML(200, "", base.ModalOnce(false, "update-permission-modal",
+		permission.PermissionModal("update", permission.PermissionForm("update", perm.ID, perm.Name, perm.Description))))
 }
 
 func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
@@ -55,77 +49,66 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 		return
 	}
 
-	permissionsContent := gin.H{
-		"Permissions": permissions,
-		"NewPermissionModal": gin.H{
-			"IsHidden":  true,
-			"ElementID": "new-permission-modal",
-			"Body": o.templates.TemplateHTML("permission_modal", gin.H{
-				"Action": "new",
-			}),
-		},
+	rows := make([]templ.Component, 0, len(permissions))
+	for _, perm := range permissions {
+		row := permission.PermissionRow(perm.ID, perm.Name, perm.Description)
+		rows = append(rows, row)
 	}
+
+	permissionsComp := permission.Permissions(rows, base.Modal(
+		true,
+		"new-permission-modal",
+		permission.PermissionModal("new", permission.PermissionForm("new", 0, "", ""))),
+	)
 
 	isHx := ctx.GetHeader("HX-Request")
 	if isHx == "true" {
 		if ctx.GetHeader("Hx-Target") == "ac-contents" {
-			ctx.HTML(200, "permissions", permissionsContent)
+			ctx.HTML(200, "", permissionsComp)
 			return
 		}
-		ctx.HTML(200, "access_control", gin.H{
-			"Body": o.templates.TemplateHTML("permissions", permissionsContent),
-		})
+		ctx.HTML(200, "", access_control.AccessControl(permissionsComp))
 		return
 	}
 
-	ctx.HTML(200, "base", gin.H{
-		"Title": "TT App - Access Control",
-		"App":   "Table Tennis App",
-		"Main": o.templates.TemplateHTML("access_control", gin.H{
-			"Body": o.templates.TemplateHTML("permissions", permissionsContent),
-		}),
-	})
+	ctx.HTML(200, "", base.Base("TT App - Access Control", "Table Tennis App", access_control.AccessControl(permissionsComp)))
 }
 
 func (o *APIAccessController) AddPermission(ctx *gin.Context) {
 	slog.Debug("AddPermission")
-	var permission models.Permission
-	err := ctx.Bind(&permission)
+	var perm models.Permission
+	err := ctx.Bind(&perm)
 	if err != nil {
 		slog.ErrorContext(ctx, "ctx.Bind()", slog.String("error", err.Error()))
 		_ = ctx.AbortWithError(http.StatusBadRequest, fmt.Errorf("fail to bind body to permission"))
 		return
 	}
-	slog.Debug("permission to add", "permission", permission)
-	id, err := o.RbacStore.PermissionStore.Insert(permission)
+	slog.Debug("permission to add", "permission", perm)
+	id, err := o.RbacStore.PermissionStore.Insert(perm)
 	if err != nil {
 		slog.ErrorContext(ctx, "RbacStore.PermissionStore.Insert()", slog.String("error", err.Error()))
 		if errors.Is(err, store.ErrConflicted) {
-
-			ctx.HTML(409, "error", gin.H{
-				"ElementID": "permission-form-error",
-				"Body":      template.HTML("Permission with the same name exists"),
-			})
 			ctx.Header("HX-Retarget", "#permission-form-error")
+			ctx.HTML(409, "", base.Error("permission-form-error", "Permission with the same name exists"))
 			return
 		}
 		_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to insert permission"))
 		return
 	}
-	permission.ID = id
-	ctx.HTML(200, "permission_row", permission)
+	perm.ID = id
+	ctx.HTML(200, "", permission.PermissionRow(perm.ID, perm.Name, perm.Description))
 }
 
 func (o *APIAccessController) UpdatePermission(ctx *gin.Context) {
-	var permission models.Permission
-	err := ctx.Bind(&permission)
+	var perm models.Permission
+	err := ctx.Bind(&perm)
 	if err != nil {
 		slog.ErrorContext(ctx, "ctx.BindJSON()", slog.String("error", err.Error()))
 		_ = ctx.AbortWithError(http.StatusBadRequest, fmt.Errorf("fail to bind body to permission"))
 		return
 	}
-	slog.Debug("update permission", "permission", permission)
-	err = o.RbacStore.PermissionStore.Update(permission.ID, permission)
+	slog.Debug("update permission", "permission", perm)
+	err = o.RbacStore.PermissionStore.Update(perm.ID, perm)
 	if err != nil {
 		if errors.Is(err, store.ErrNotFound) {
 			slog.ErrorContext(ctx, "RbacStore.PermissionStore.Update()", slog.String("error", err.Error()))
@@ -133,17 +116,15 @@ func (o *APIAccessController) UpdatePermission(ctx *gin.Context) {
 			return
 		}
 		if errors.Is(err, store.ErrConflicted) {
-			ctx.HTML(409, "error", gin.H{
-				"ElementID": "permission-form-error",
-				"Body":      template.HTML("Permission with the same name exists"),
-			})
+			ctx.Header("HX-Retarget", "#permission-form-error")
+			ctx.HTML(409, "", base.Error("permission-form-error", "Permission with the same name exists"))
 			return
 		}
 		slog.ErrorContext(ctx, "RbacStore.PermissionStore.Update()", slog.String("error", err.Error()))
 		_ = ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("fail to insert permission"))
 		return
 	}
-	ctx.HTML(200, "permission_row", permission)
+	ctx.HTML(200, "", permission.PermissionRow(perm.ID, perm.Name, perm.Description))
 }
 
 func (o *APIAccessController) DeletePermission(ctx *gin.Context) {

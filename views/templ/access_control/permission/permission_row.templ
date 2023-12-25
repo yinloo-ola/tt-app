@@ -1,0 +1,38 @@
+package permission
+
+import "fmt"
+
+templ PermissionRow(id int64, name, description string) {
+	<div
+		id={ fmt.Sprintf("permission-row-%d", id) }
+		
+		class="flex flex-col gap-4 bg-amber-1 px-4 pt-4 pb-6 transition duration-150 ease-in-out hover:shadow-lg"
+	>
+		<div class="font-extrabold text-lg">{ name }</div>
+		<div class="flex items-center gap-2 pb-2">
+			<div class="h-5 w-5 i-tabler-file-description"></div>
+			{ description }
+		</div>
+		<div class="flex gap-4">
+			<button
+				hx-get={ fmt.Sprintf("/access_control/permission_modal?id=%d&actionType=update", id) }
+				hx-target="#update-permission-modal"
+				hx-swap="outerHTML transition:true"
+				type="button"
+				class="border-2 border-sky-7 rounded-lg border-solid bg-transparent p-2 font-semibold text-sky-7 hover:bg-sky-7 hover:text-white active:bg-sky-6 hover:border-transparent"
+			>
+				<div class="w-4 h-4 i-tabler-edit"></div>
+			</button>
+			<button
+				hx-delete={ fmt.Sprintf("/access_control/permissions/%d", id) }
+				hx-swap="delete transition:true"
+				hx-target={ fmt.Sprintf("#permission-row-%d", id) }
+				hx-confirm={ fmt.Sprintf("Delete %s?", name) }
+				type="button"
+				class="border-2 border-red-6 rounded-lg border-solid bg-transparent p-2 font-semibold text-red-6 hover:bg-red-6 hover:text-white active:bg-red-5 hover:border-transparent"
+			>
+				<div class="w-4 h-4 i-tabler-trash"></div>
+			</button>
+		</div>
+	</div>
+}

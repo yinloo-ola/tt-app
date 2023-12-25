@@ -1,0 +1,14 @@
+package permission
+
+templ PermissionModal(action string, permissionForm templ.Component) {
+	<div class="-translate-y-50% relative top-50% w-75% rounded-lg bg-amber-1 p-4">
+		<h3>
+			if action == "new" {
+				Add New Permission
+			} else if action =="update" {
+				Update
+			}
+		</h3>
+		@permissionForm
+	</div>
+}

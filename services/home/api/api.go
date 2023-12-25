@@ -1,29 +1,19 @@
 package api
 
 import (
-	"bytes"
-	"html/template"
-
 	"github.com/gin-gonic/gin"
-	template_util "github.com/yinloo-ola/tt-app/util/template"
+	"github.com/yinloo-ola/tt-app/views/templ/base"
+	"github.com/yinloo-ola/tt-app/views/templ/home"
 )
 
-func AddAPIs(routerGroup *gin.RouterGroup, templates template_util.TemplateExecutor) {
-	ctrl := &APIHomeController{templates: templates}
+func AddAPIs(routerGroup *gin.RouterGroup) {
+	ctrl := &APIHomeController{}
 	routerGroup.GET("/", ctrl.Index)
 }
 
 type APIHomeController struct {
-	templates template_util.TemplateExecutor
 }
 
 func (o *APIHomeController) Index(c *gin.Context) {
-	buf := bytes.NewBufferString("")
-	o.templates.ExecuteTemplate(buf, "home", nil)
-
-	c.HTML(200, "base", gin.H{
-		"Title": "Table Tennis App",
-		"App":   "Table Tennis App",
-		"Main":  template.HTML(buf.String()),
-	})
+	c.HTML(200, "", base.Base("Table Tennis App", "Table Tennis App", home.Home()))
 }
