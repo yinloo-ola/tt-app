@@ -10,7 +10,7 @@ func hxAction(action string, id int64) templ.Attributes {
 		return templ.Attributes{
 			"hx-post":   "/access_control/permissions",
 			"hx-target": "#permission-list",
-			"hx-swap":   "outerHTML transition:true",
+			"hx-swap":   "afterbegin transition:true",
 		}
 	} else if action == "update" {
 		return templ.Attributes{

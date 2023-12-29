@@ -89,6 +89,7 @@ func (o *APIAccessController) AddPermission(ctx *gin.Context) {
 		slog.ErrorContext(ctx, "RbacStore.PermissionStore.Insert()", slog.String("error", err.Error()))
 		if errors.Is(err, store.ErrConflicted) {
 			ctx.Header("HX-Retarget", "#permission-form-error")
+			ctx.Header("HX-Reswap", "outerHTML transition:true")
 			ctx.HTML(409, "", base.Error("permission-form-error", "Permission with the same name exists"))
 			return
 		}
@@ -117,6 +118,7 @@ func (o *APIAccessController) UpdatePermission(ctx *gin.Context) {
 		}
 		if errors.Is(err, store.ErrConflicted) {
 			ctx.Header("HX-Retarget", "#permission-form-error")
+			ctx.Header("HX-Reswap", "outerHTML transition:true")
 			ctx.HTML(409, "", base.Error("permission-form-error", "Permission with the same name exists"))
 			return
 		}
