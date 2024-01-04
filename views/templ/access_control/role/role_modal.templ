@@ -1,0 +1,14 @@
+package role
+
+templ RoleModal(action string, roleForm templ.Component) {
+	<div class="-translate-y-50% relative top-50% w-75% rounded-lg bg-amber-1 p-4">
+		<h3>
+			if action == "new" {
+				Add New Role
+			} else if action =="update" {
+				Update
+			}
+		</h3>
+		@roleForm
+	</div>
+}

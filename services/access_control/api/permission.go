@@ -14,6 +14,7 @@ import (
 	"github.com/yinloo-ola/tt-app/views/templ/access_control"
 	"github.com/yinloo-ola/tt-app/views/templ/access_control/permission"
 	"github.com/yinloo-ola/tt-app/views/templ/base"
+	"github.com/yinloo-ola/tt-app/views/templ/widget"
 )
 
 func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
@@ -36,7 +37,7 @@ func (o *APIAccessController) PermissionModal(ctx *gin.Context) {
 		return
 	}
 
-	ctx.HTML(200, "", base.ModalOnce(false, "update-permission-modal",
+	ctx.HTML(200, "", widget.ModalOnce(false, "update-permission-modal",
 		permission.PermissionModal("update", permission.PermissionForm("update", perm.ID, perm.Name, perm.Description))))
 }
 
@@ -55,7 +56,7 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 		rows = append(rows, row)
 	}
 
-	permissionsComp := permission.Permissions(rows, base.Modal(
+	permissionsComp := permission.Permissions(rows, widget.Modal(
 		true,
 		"new-permission-modal",
 		permission.PermissionModal("new", permission.PermissionForm("new", 0, "", ""))),
@@ -67,11 +68,11 @@ func (o *APIAccessController) GetPermissions(ctx *gin.Context) {
 			ctx.HTML(200, "", permissionsComp)
 			return
 		}
-		ctx.HTML(200, "", access_control.AccessControl(permissionsComp))
+		ctx.HTML(200, "", access_control.AccessControl(permissionsComp, "permission"))
 		return
 	}
 
-	ctx.HTML(200, "", base.Base("TT App - Access Control", "Table Tennis App", access_control.AccessControl(permissionsComp)))
+	ctx.HTML(200, "", base.Base("TT App - Access Control", "Table Tennis App", access_control.AccessControl(permissionsComp, "permission")))
 }
 
 func (o *APIAccessController) AddPermission(ctx *gin.Context) {

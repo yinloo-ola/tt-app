@@ -1,5 +1,23 @@
 package base
 
+script toggleMainPopup() {
+	if (event.target.id === 'mainPopup') {
+		return;
+	}
+	event.preventDefault();
+	event.stopPropagation();
+	var el = document.getElementById("mainPopup");
+	el.classList.toggle("invisible");
+}
+
+script hideMainPopup() {
+	if (event.target.id === 'mainPopup') {
+		return;
+	}
+	var el = document.getElementById("mainPopup");
+	el.classList.add("invisible");
+}
+
 templ Base(title, app string, main templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -9,16 +27,15 @@ templ Base(title, app string, main templ.Component) {
 			<title>{ title }</title>
 			<link rel="stylesheet" type="text/css" href="/uno.css"/>
 			<link rel="icon" href="/tt-logo.svg"/>
-			<script src="https://unpkg.com/htmx.org/dist/htmx.min.js" defer></script>
-			<script src="https://unpkg.com/hyperscript.org@0.9.11" defer></script>
-			<script src="/event.js" defer></script>
+			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+			<script src="/js/event.js" defer></script>
 		</head>
 		<body
 			style="margin:0"
 			class="font-sans text-amber-9"
-			_="on click if #popup do not match .hidden then send closePopover to #popup"
+			onclick={ hideMainPopup() }
 		>
-			<div class="px-5 py-2 flex flex-row justify-between">
+			<div class="px-5 py-2 flex flex-row justify-between bg-amber-1">
 				<!-- <img src="/tt-logo.svg" alt="tt-logo" class="h-16" /> -->
 				<div class="flex items-center gap-2">
 					<div class="i-tabler-cards h-12 w-12"></div>
@@ -36,12 +53,11 @@ templ Base(title, app string, main templ.Component) {
 					<div class="relative">
 						<div
 							class="i-tabler-grid-dots h-7 w-7 border-solid border-1 rounded relative cursor-pointer"
-							_="on click halt the event toggle .hidden on #popup"
+							onclick={ toggleMainPopup() }
 						></div>
 						<div
-							id="popup"
-							class="absolute right-0 bg-white p-4 border border-none rounded-lg shadow-lg z-50 hidden mt-2"
-							_="on closePopover add .hidden"
+							id="mainPopup"
+							class="absolute right-0 bg-white p-4 border border-none rounded-lg shadow-lg z-50 mt-2 invisible"
 						>
 							<div class="flex flex-col items-center gap-4 px-2 w-16">
 								<a
@@ -52,9 +68,14 @@ templ Base(title, app string, main templ.Component) {
 									hx-target="main"
 									hx-push-url="/access_control/permissions"
 								>Permissions</a>
-								<!--
-                            add more links here
-                        -->
+								<a
+									class="no-underline hover:underline"
+									href="/access_control/roles"
+									hx-trigger="click"
+									hx-get="/access_control/roles"
+									hx-target="main"
+									hx-push-url="/access_control/roles"
+								>Roles</a>
 							</div>
 						</div>
 					</div>

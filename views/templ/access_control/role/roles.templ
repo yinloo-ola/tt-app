@@ -1,4 +1,4 @@
-package permission
+package role
 
 script showModal(id string) {
 	const el = document.getElementById(id);
@@ -8,11 +8,11 @@ script showModal(id string) {
 	el.dispatchEvent(eventToggleModal);
 }
 
-templ Permissions(permissionRows []templ.Component, newPermissionModal templ.Component) {
+templ Roles(roleRows []templ.Component, newRoleModal templ.Component) {
 	<div class="w-full flex flex-col gap-4">
 		<div class="flex justify-end">
 			<button
-				onclick={ showModal("new-permission-modal") }
+				onclick={ showModal("new-role-modal") }
 				type="button"
 				class="border-2 border-emerald-7 rounded-lg border-solid bg-transparent p-2 font-semibold text-emerald-7 hover:bg-emerald-7 hover:text-white active:bg-emerald-6 hover:border-transparent"
 			>
@@ -23,14 +23,14 @@ templ Permissions(permissionRows []templ.Component, newPermissionModal templ.Com
 			</button>
 		</div>
 		<div
-			id="permission-list"
+			id="role-list"
 			class="grid grid-flow-row grid-cols-1 w-full gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
 		>
-			for _, permissionRow := range permissionRows {
-				@permissionRow
+			for _, roleRow := range roleRows {
+				@roleRow
 			}
 		</div>
 	</div>
-	<div id="update-permission-modal" class="hidden"></div>
-	@newPermissionModal
+	<div id="update-role-modal" class="hidden"></div>
+	@newRoleModal
 }

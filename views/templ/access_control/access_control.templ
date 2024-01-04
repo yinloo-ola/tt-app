@@ -1,40 +1,77 @@
 package access_control
 
-templ AccessControl(body templ.Component) {
+script selectTab() {
+	if (!event.detail.successful) {
+		return;
+	}
+	event.preventDefault();
+	event.stopPropagation();
+	const siblings = event.target.parentElement.children;
+	Array.from(siblings).forEach(sibling => {
+		sibling.removeAttribute('aria-select');
+		sibling.classList.remove('bg-amber-3');
+	});
+	event.target.setAttribute('aria-select', '');
+	event.target.classList.add('bg-amber-3');
+}
+
+script selectTabByID(tab string) {
+	var el = document.getElementById("main-tabs");
+	const siblings = el.children;
+	Array.from(siblings).forEach(sibling => {
+		if (sibling.tagName === "DIV") {
+			if (sibling.id === tab) {
+				sibling.setAttribute("aria-select", "");
+				sibling.classList.add("bg-amber-3");
+			} else {
+				sibling.removeAttribute("aria-select");
+				sibling.classList.remove("bg-amber-3");
+			}
+		}
+	});
+}
+
+templ AccessControl(body templ.Component, tab string) {
 	<div
 		id="ac-tabs"
 		hx-target="#ac-contents"
 		class="m-4 h-full flex flex-col divide-gray-300 divide-y divide-x-0 divide-solid rounded-md bg-gray-100 shadow-md"
 	>
-		<div class="flex flex-row gap-2 rounded-t-md p-4">
+		<div class="flex flex-row gap-2 rounded-t-md p-4" id="main-tabs">
 			<div
+				id="user"
 				hx-get="/access_control/users"
+				hx-push-url="true"
 				aria-controls="tab-content"
-				aria-selected="false"
 				class="tab-pill"
-				_="on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent <div/> set @aria-selected of <[aria-selected=true]/> in the closest parent <div/> to false set my @aria-selected to true"
+				hx-on::after-request={selectTab()}
 			>
 				Users
 			</div>
 			<div
+				id="role"
 				hx-get="/access_control/roles"
+				hx-push-url="true"
 				aria-controls="tab-content"
-				aria-selected="false"
 				class="tab-pill"
-				_="on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent <div/> set @aria-selected of <[aria-selected=true]/> in the closest parent <div/> to false set my @aria-selected to true"
+				hx-on::after-request={selectTab()}
 			>
 				Roles
 			</div>
 			<div
+				id="permission"
 				hx-get="/access_control/permissions"
+				hx-push-url="true"
 				aria-controls="tab-content"
-				aria-selected="true"
-				class="bg-amber-3 tab-pill"
-				_="on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent <div/> set @aria-selected of <[aria-selected=true]/> in the closest parent <div/> to false set my @aria-selected to true"
+				class="tab-pill"
+				hx-on::after-request={selectTab()}
 			>
 				Permissions
 			</div>
 		</div>
-		<div id="ac-contents" class="flex rounded-b-md p-4">@body</div>
+		<div id="ac-contents" class="flex rounded-b-md p-4">
+			@body
+		</div>
 	</div>
+	@selectTabByID(tab)
 }

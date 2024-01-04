@@ -1,26 +1,35 @@
-package permission
+package role
 
 import (
 	"strconv"
+	"slices"
 	"fmt"
+	"github.com/yinloo-ola/tt-app/common/rbac/models"
 )
 
 func hxAction(action string, id int64) templ.Attributes {
 	if action == "new" {
 		return templ.Attributes{
-			"hx-post":   "/access_control/permissions",
-			"hx-target": "#permission-list",
+			"hx-post":   "/access_control/roles",
+			"hx-target": "#role-list",
 			"hx-swap":   "afterbegin transition:true",
 		}
 	} else if action == "update" {
 		return templ.Attributes{
-			"hx-put":    "/access_control/permissions",
-			"hx-target": fmt.Sprintf("#permission-row-%d", id),
+			"hx-put":    "/access_control/roles",
+			"hx-target": fmt.Sprintf("#role-row-%d", id),
 			"hx-swap":   "outerHTML transition:true",
 		}
 	}
 	return templ.Attributes{}
 }
+
+func isSelected(perm models.Permission, all []models.Permission) bool {
+	return slices.ContainsFunc(all, func(p models.Permission) bool {
+		return p.ID == perm.ID
+	})
+}
+
 
 script toggleModal() {
   const form = event.target.closest("form");
@@ -42,7 +51,7 @@ script toggleModalIfSuccessful() {
   event.target.dispatchEvent(eventToggleModal);
 }
 
-templ PermissionForm(action string, id int64, name, description string) {
+templ RoleForm(action string, id int64, name, description string, all, selected []models.Permission) {
 	<form
 		{ hxAction(action, id)... }
 		hx-on::after-request={ toggleModalIfSuccessful() }
@@ -59,12 +68,12 @@ templ PermissionForm(action string, id int64, name, description string) {
 					required
 				}
 			/>
-			<label for={ fmt.Sprintf("permission-%s", name) } class="mb-2 block text-amber-9 text-sm">Permission</label>
+			<label for="role" class="mb-2 block text-amber-9 text-sm">Role</label>
 			<input
 				type="text"
-				id={ fmt.Sprintf("permission-%s", name) }
-				value={ name }
+				id="role"
 				name="name"
+				value={ name }
 				class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
 				required
 			/>
@@ -80,7 +89,20 @@ templ PermissionForm(action string, id int64, name, description string) {
 				required
 			/>
 		</div>
-		<div id="permission-form-error"></div>
+		<div class="flex flex-col">
+			<label for="permissions" class="mb-2 block text-amber-9 text-sm">Permissions</label>
+			<select
+				name="permissions"
+				id="permissions"
+				multiple
+				class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+			>
+				for _, perm := range all {
+					<option value={ strconv.FormatInt(perm.ID, 10) } selected?={ isSelected(perm, selected) }>{ perm.Name }</option>
+				}
+			</select>
+		</div>
+		<div id="role-form-error"></div>
 		<div class="flex justify-end gap-4 py-2">
 			<button
 				onclick={ toggleModal() }

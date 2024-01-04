@@ -1,0 +1,39 @@
+package widget
+
+import "fmt"
+
+func flexOrHidden(hidden bool) string {
+	if hidden {
+		return "hidden"
+	}
+	return "flex"
+}
+
+script hide(id string) {
+	var el = document.getElementById(id);
+	el.classList.remove("flex");
+	el.classList.add("hidden");
+}
+
+script toggleModal(id string) {
+	console.log('modal');
+	event.stopPropagation();
+	const el = document.getElementById(id);
+	el.classList.toggle("hidden");
+	el.classList.toggle("flex");
+	const errorDivs = el.querySelectorAll('div.error');
+	errorDivs.forEach((div) => {
+		div.remove();
+	});
+}
+
+templ Modal(hidden bool, elementID string, body templ.Component) {
+	<div
+		id={ elementID }
+		class={fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden))}
+		hx-on:toggle-modal={toggleModal(elementID)}
+	>
+		<div class="-z-1 absolute inset-0" onclick={hide(elementID)}></div>
+		@body
+	</div>
+}

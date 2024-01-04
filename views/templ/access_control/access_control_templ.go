@@ -10,7 +10,48 @@ import "context"
 import "io"
 import "bytes"
 
-func AccessControl(body templ.Component) templ.Component {
+func selectTab() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_selectTab_d290`,
+		Function: `function __templ_selectTab_d290(){if (!event.detail.successful) {
+		return;
+	}
+	event.preventDefault();
+	event.stopPropagation();
+	const siblings = event.target.parentElement.children;
+	Array.from(siblings).forEach(sibling => {
+		sibling.removeAttribute('aria-select');
+		sibling.classList.remove('bg-amber-3');
+	});
+	event.target.setAttribute('aria-select', '');
+	event.target.classList.add('bg-amber-3');}`,
+		Call:       templ.SafeScript(`__templ_selectTab_d290`),
+		CallInline: templ.SafeScriptInline(`__templ_selectTab_d290`),
+	}
+}
+
+func selectTabByID(tab string) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_selectTabByID_e33c`,
+		Function: `function __templ_selectTabByID_e33c(tab){var el = document.getElementById("main-tabs");
+	const siblings = el.children;
+	Array.from(siblings).forEach(sibling => {
+		if (sibling.tagName === "DIV") {
+			if (sibling.id === tab) {
+				sibling.setAttribute("aria-select", "");
+				sibling.classList.add("bg-amber-3");
+			} else {
+				sibling.removeAttribute("aria-select");
+				sibling.classList.remove("bg-amber-3");
+			}
+		}
+	});}`,
+		Call:       templ.SafeScript(`__templ_selectTabByID_e33c`, tab),
+		CallInline: templ.SafeScriptInline(`__templ_selectTabByID_e33c`, tab),
+	}
+}
+
+func AccessControl(body templ.Component, tab string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -23,30 +64,81 @@ func AccessControl(body templ.Component) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"ac-tabs\" hx-target=\"#ac-contents\" class=\"m-4 h-full flex flex-col divide-gray-300 divide-y divide-x-0 divide-solid rounded-md bg-gray-100 shadow-md\"><div class=\"flex flex-row gap-2 rounded-t-md p-4\"><div hx-get=\"/access_control/users\" aria-controls=\"tab-content\" aria-selected=\"false\" class=\"tab-pill\" _=\"on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent &lt;div/&gt; set @aria-selected of &lt;[aria-selected=true]/&gt; in the closest parent &lt;div/&gt; to false set my @aria-selected to true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"ac-tabs\" hx-target=\"#ac-contents\" class=\"m-4 h-full flex flex-col divide-gray-300 divide-y divide-x-0 divide-solid rounded-md bg-gray-100 shadow-md\"><div class=\"flex flex-row gap-2 rounded-t-md p-4\" id=\"main-tabs\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var2 := `Users`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, selectTab())
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div hx-get=\"/access_control/roles\" aria-controls=\"tab-content\" aria-selected=\"false\" class=\"tab-pill\" _=\"on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent &lt;div/&gt; set @aria-selected of &lt;[aria-selected=true]/&gt; in the closest parent &lt;div/&gt; to false set my @aria-selected to true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"user\" hx-get=\"/access_control/users\" hx-push-url=\"true\" aria-controls=\"tab-content\" class=\"tab-pill\" hx-on::after-request=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var3 := `Roles`
+		var templ_7745c5c3_Var2 templ.ComponentScript = selectTab()
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2.Call)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var3 := `Users`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div hx-get=\"/access_control/permissions\" aria-controls=\"tab-content\" aria-selected=\"true\" class=\"bg-amber-3 tab-pill\" _=\"on htmx:afterRequest take .bg-amber-3 from .tab-pill in the closest parent &lt;div/&gt; set @aria-selected of &lt;[aria-selected=true]/&gt; in the closest parent &lt;div/&gt; to false set my @aria-selected to true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var4 := `Permissions`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, selectTab())
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"role\" hx-get=\"/access_control/roles\" hx-push-url=\"true\" aria-controls=\"tab-content\" class=\"tab-pill\" hx-on::after-request=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 templ.ComponentScript = selectTab()
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4.Call)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var5 := `Roles`
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, selectTab())
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"permission\" hx-get=\"/access_control/permissions\" hx-push-url=\"true\" aria-controls=\"tab-content\" class=\"tab-pill\" hx-on::after-request=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var6 templ.ComponentScript = selectTab()
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6.Call)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var7 := `Permissions`
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -59,6 +151,10 @@ func AccessControl(body templ.Component) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = selectTabByID(tab).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

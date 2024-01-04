@@ -1,0 +1,36 @@
+package widget
+
+import "fmt"
+
+script toggleModalOnce(id string) {
+	console.log('modalOnce');
+	event.stopPropagation();
+	const el = document.getElementById(id);
+	el.classList.toggle("hidden");
+	el.classList.toggle("flex");
+	const children = el.children;
+	children.forEach((div) => {
+		div.remove();
+	});
+}
+
+script removeDiv(id string) {
+	const el = document.getElementById(id);
+	el.classList.remove("flex");
+	el.classList.add("hidden");
+	const children = el.children;
+	children.forEach((div) => {
+		div.remove();
+	});
+}
+
+templ ModalOnce(hidden bool, elementID string, body templ.Component) {
+	<div
+		id={ elementID }
+		class={fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden))}
+		hx-on:toggle-modal={toggleModalOnce(elementID)}
+	>
+		<div class="-z-1 absolute inset-0" onclick={removeDiv(elementID)}></div>
+		@body
+	</div>
+}

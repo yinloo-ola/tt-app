@@ -10,6 +10,34 @@ import "context"
 import "io"
 import "bytes"
 
+func toggleMainPopup() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_toggleMainPopup_1256`,
+		Function: `function __templ_toggleMainPopup_1256(){if (event.target.id === 'mainPopup') {
+		return;
+	}
+	event.preventDefault();
+	event.stopPropagation();
+	var el = document.getElementById("mainPopup");
+	el.classList.toggle("invisible");}`,
+		Call:       templ.SafeScript(`__templ_toggleMainPopup_1256`),
+		CallInline: templ.SafeScriptInline(`__templ_toggleMainPopup_1256`),
+	}
+}
+
+func hideMainPopup() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_hideMainPopup_0a22`,
+		Function: `function __templ_hideMainPopup_0a22(){if (event.target.id === 'mainPopup') {
+		return;
+	}
+	var el = document.getElementById("mainPopup");
+	el.classList.add("invisible");}`,
+		Call:       templ.SafeScript(`__templ_hideMainPopup_0a22`),
+		CallInline: templ.SafeScriptInline(`__templ_hideMainPopup_0a22`),
+	}
+}
+
 func Base(title, app string, main templ.Component) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -30,13 +58,13 @@ func Base(title, app string, main templ.Component) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/templ/base/base.templ`, Line: 8, Col: 17}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/templ/base/base.templ`, Line: 26, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/uno.css\"><link rel=\"icon\" href=\"/tt-logo.svg\"><script src=\"https://unpkg.com/htmx.org/dist/htmx.min.js\" defer>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link rel=\"stylesheet\" type=\"text/css\" href=\"/uno.css\"><link rel=\"icon\" href=\"/tt-logo.svg\"><script src=\"https://unpkg.com/htmx.org@1.9.10\" integrity=\"sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC\" crossorigin=\"anonymous\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -45,7 +73,7 @@ func Base(title, app string, main templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><script src=\"https://unpkg.com/hyperscript.org@0.9.11\" defer>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><script src=\"/js/event.js\" defer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,16 +82,24 @@ func Base(title, app string, main templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><script src=\"/event.js\" defer>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var5 := ``
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, hideMainPopup())
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script></head><body style=\"margin:0\" class=\"font-sans text-amber-9\" _=\"on click if #popup do not match .hidden then send closePopover to #popup\"><div class=\"px-5 py-2 flex flex-row justify-between\"><!--")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<body style=\"margin:0\" class=\"font-sans text-amber-9\" onclick=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 templ.ComponentScript = hideMainPopup()
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5.Call)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"px-5 py-2 flex flex-row justify-between bg-amber-1\"><!--")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -79,7 +115,7 @@ func Base(title, app string, main templ.Component) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(app)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/templ/base/base.templ`, Line: 24, Col: 15}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/templ/base/base.templ`, Line: 41, Col: 15}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -94,27 +130,42 @@ func Base(title, app string, main templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a><div class=\"relative\"><div class=\"i-tabler-grid-dots h-7 w-7 border-solid border-1 rounded relative cursor-pointer\" _=\"on click halt the event toggle .hidden on #popup\"></div><div id=\"popup\" class=\"absolute right-0 bg-white p-4 border border-none rounded-lg shadow-lg z-50 hidden mt-2\" _=\"on closePopover add .hidden\"><div class=\"flex flex-col items-center gap-4 px-2 w-16\"><a class=\"no-underline hover:underline\" href=\"/access_control/permissions\" hx-trigger=\"click\" hx-get=\"/access_control/permissions\" hx-target=\"main\" hx-push-url=\"/access_control/permissions\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a><div class=\"relative\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var9 := `Permissions`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, toggleMainPopup())
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a><!--")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"i-tabler-grid-dots h-7 w-7 border-solid border-1 rounded relative cursor-pointer\" onclick=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var10 := `
-                            add more links here
-                        `
+		var templ_7745c5c3_Var9 templ.ComponentScript = toggleMainPopup()
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9.Call)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div id=\"mainPopup\" class=\"absolute right-0 bg-white p-4 border border-none rounded-lg shadow-lg z-50 mt-2 invisible\"><div class=\"flex flex-col items-center gap-4 px-2 w-16\"><a class=\"no-underline hover:underline\" href=\"/access_control/permissions\" hx-trigger=\"click\" hx-get=\"/access_control/permissions\" hx-target=\"main\" hx-push-url=\"/access_control/permissions\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var10 := `Permissions`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("--></div></div></div></div></div><main id=\"main\" class=\"\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <a class=\"no-underline hover:underline\" href=\"/access_control/roles\" hx-trigger=\"click\" hx-get=\"/access_control/roles\" hx-target=\"main\" hx-push-url=\"/access_control/roles\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var11 := `Roles`
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var11)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></div></div></div></div></div><main id=\"main\" class=\"\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

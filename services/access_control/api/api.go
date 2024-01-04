@@ -28,10 +28,12 @@ func AddAPIs(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("/permission_modal", ctrl.PermissionModal)
 	routerGroup.DELETE("/permissions/:id", ctrl.DeletePermission)
 
-	// routerGroup.GET("/roles", ctrl.GetRoles)
-	// routerGroup.POST("/roles", ctrl.AddRole)
-	// routerGroup.PUT("/roles", ctrl.UpdateRole)
-	// routerGroup.DELETE("/roles/:id", ctrl.DeleteRole)
+	routerGroup.GET("/roles", ctrl.GetRoles)
+	routerGroup.GET("/role_modal", ctrl.RoleModal)
+
+	routerGroup.POST("/roles", ctrl.AddRole)
+	routerGroup.PUT("/roles", ctrl.UpdateRole)
+	routerGroup.DELETE("/roles/:id", ctrl.DeleteRole)
 }
 
 type APIAccessController struct {
