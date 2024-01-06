@@ -30,10 +30,10 @@ script toggleModal(id string) {
 templ Modal(hidden bool, elementID string, body templ.Component) {
 	<div
 		id={ elementID }
-		class={fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden))}
-		hx-on:toggle-modal={toggleModal(elementID)}
+		class={ fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden)) }
+		hx-on:toggle-modal={ toggleModal(elementID) }
 	>
-		<div class="-z-1 absolute inset-0" onclick={hide(elementID)}></div>
+		<div class="-z-1 absolute inset-0" onclick={ hide(elementID) }></div>
 		@body
 	</div>
 }

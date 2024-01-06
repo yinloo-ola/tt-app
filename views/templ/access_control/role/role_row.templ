@@ -5,7 +5,6 @@ import "fmt"
 templ RoleRow(id int64, name, description string) {
 	<div
 		id={ fmt.Sprintf("role-row-%d", id) }
-		
 		class="flex flex-col gap-4 bg-amber-1 px-4 pt-4 pb-6 transition duration-150 ease-in-out hover:shadow-lg"
 	>
 		<div class="font-extrabold text-lg">{ name }</div>

@@ -195,7 +195,7 @@ func RoleForm(action string, id int64, name, description string, all, selected [
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(perm.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/templ/access_control/role/role_form.templ`, Line: 100, Col: 106}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/templ/access_control/role/role_form.templ`, Line: 99, Col: 106}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {

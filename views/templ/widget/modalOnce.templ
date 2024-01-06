@@ -27,10 +27,10 @@ script removeDiv(id string) {
 templ ModalOnce(hidden bool, elementID string, body templ.Component) {
 	<div
 		id={ elementID }
-		class={fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden))}
-		hx-on:toggle-modal={toggleModalOnce(elementID)}
+		class={ fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden)) }
+		hx-on:toggle-modal={ toggleModalOnce(elementID) }
 	>
-		<div class="-z-1 absolute inset-0" onclick={removeDiv(elementID)}></div>
+		<div class="-z-1 absolute inset-0" onclick={ removeDiv(elementID) }></div>
 		@body
 	</div>
 }

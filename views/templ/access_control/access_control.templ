@@ -44,7 +44,7 @@ templ AccessControl(body templ.Component, tab string) {
 				hx-push-url="true"
 				aria-controls="tab-content"
 				class="tab-pill"
-				hx-on::after-request={selectTab()}
+				hx-on::after-request={ selectTab() }
 			>
 				Users
 			</div>
@@ -54,7 +54,7 @@ templ AccessControl(body templ.Component, tab string) {
 				hx-push-url="true"
 				aria-controls="tab-content"
 				class="tab-pill"
-				hx-on::after-request={selectTab()}
+				hx-on::after-request={ selectTab() }
 			>
 				Roles
 			</div>
@@ -64,7 +64,7 @@ templ AccessControl(body templ.Component, tab string) {
 				hx-push-url="true"
 				aria-controls="tab-content"
 				class="tab-pill"
-				hx-on::after-request={selectTab()}
+				hx-on::after-request={ selectTab() }
 			>
 				Permissions
 			</div>
