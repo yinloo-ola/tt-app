@@ -2,35 +2,32 @@ package widget
 
 import "fmt"
 
-script toggleModalOnce(id string) {
-	console.log('modalOnce');
+script toggle(id string) {
 	event.stopPropagation();
-	const el = document.getElementById(id);
-	el.classList.toggle("hidden");
-	el.classList.toggle("flex");
-	const children = el.children;
-	children.forEach((div) => {
-		div.remove();
-	});
+	const el = closestElement(event.target, "#"+id);
+	toggleClasses(el, ['hidden','flex']);
+	if (el.classList.contains('flex')) {
+		console.log('is hidden now');
+	}
 }
 
-script removeDiv(id string) {
-	const el = document.getElementById(id);
-	el.classList.remove("flex");
-	el.classList.add("hidden");
-	const children = el.children;
-	children.forEach((div) => {
-		div.remove();
-	});
+script hide(id string) {
+	event.stopPropagation();
+	const el = closestElement(event.target, "#"+id);
+	toggleClasses(el, ['hidden','flex']);
+	const childrenToRemove = el.querySelectorAll('pi');
+	for (const child of childrenToRemove) {
+		el.remove(child);
+	}
 }
 
 templ ModalOnce(hidden bool, elementID string, body templ.Component) {
 	<div
 		id={ elementID }
 		class={ fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden)) }
-		hx-on:toggle-modal={ toggleModalOnce(elementID) }
+		hx-on:toggle-modal={ toggle(elementID) }
 	>
-		<div class="-z-1 absolute inset-0" onclick={ removeDiv(elementID) }></div>
+		<div class="-z-1 absolute inset-0" onclick={ hide(elementID) }></div>
 		@body
 	</div>
 }

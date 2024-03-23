@@ -9,31 +9,19 @@ func flexOrHidden(hidden bool) string {
 	return "flex"
 }
 
-script hide(id string) {
-	var el = document.getElementById(id);
-	el.classList.remove("flex");
-	el.classList.add("hidden");
-}
-
-script toggleModal(id string) {
-	console.log('modal');
+script toggleVisibility(id string) {
 	event.stopPropagation();
-	const el = document.getElementById(id);
-	el.classList.toggle("hidden");
-	el.classList.toggle("flex");
-	const errorDivs = el.querySelectorAll('div.error');
-	errorDivs.forEach((div) => {
-		div.remove();
-	});
+	const el = closestElement(event.target, "#"+id);
+	toggleClasses(el, ['hidden','flex'])
 }
 
 templ Modal(hidden bool, elementID string, body templ.Component) {
 	<div
 		id={ elementID }
 		class={ fmt.Sprintf("fixed inset-0 z-48 flex-col items-center bg-gray-9/50 transition duration-1000 ease-in-out %s", flexOrHidden(hidden)) }
-		hx-on:toggle-modal={ toggleModal(elementID) }
+		hx-on:toggle-modal={ toggleVisibility(elementID) }
 	>
-		<div class="-z-1 absolute inset-0" onclick={ hide(elementID) }></div>
+		<div class="-z-1 absolute inset-0" onclick={ toggleVisibility(elementID) }></div>
 		@body
 	</div>
 }

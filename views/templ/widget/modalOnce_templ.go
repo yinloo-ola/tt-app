@@ -12,35 +12,32 @@ import "bytes"
 
 import "fmt"
 
-func toggleModalOnce(id string) templ.ComponentScript {
+func toggle(id string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_toggleModalOnce_e22d`,
-		Function: `function __templ_toggleModalOnce_e22d(id){console.log('modalOnce');
-	event.stopPropagation();
-	const el = document.getElementById(id);
-	el.classList.toggle("hidden");
-	el.classList.toggle("flex");
-	const children = el.children;
-	children.forEach((div) => {
-		div.remove();
-	});}`,
-		Call:       templ.SafeScript(`__templ_toggleModalOnce_e22d`, id),
-		CallInline: templ.SafeScriptInline(`__templ_toggleModalOnce_e22d`, id),
+		Name: `__templ_toggle_39e6`,
+		Function: `function __templ_toggle_39e6(id){event.stopPropagation();
+	const el = closestElement(event.target, "#"+id);
+	toggleClasses(el, ['hidden','flex']);
+	if (el.classList.contains('flex')) {
+		console.log('is hidden now');
+	}}`,
+		Call:       templ.SafeScript(`__templ_toggle_39e6`, id),
+		CallInline: templ.SafeScriptInline(`__templ_toggle_39e6`, id),
 	}
 }
 
-func removeDiv(id string) templ.ComponentScript {
+func hide(id string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_removeDiv_7520`,
-		Function: `function __templ_removeDiv_7520(id){const el = document.getElementById(id);
-	el.classList.remove("flex");
-	el.classList.add("hidden");
-	const children = el.children;
-	children.forEach((div) => {
-		div.remove();
-	});}`,
-		Call:       templ.SafeScript(`__templ_removeDiv_7520`, id),
-		CallInline: templ.SafeScriptInline(`__templ_removeDiv_7520`, id),
+		Name: `__templ_hide_1ea0`,
+		Function: `function __templ_hide_1ea0(id){event.stopPropagation();
+	const el = closestElement(event.target, "#"+id);
+	toggleClasses(el, ['hidden','flex']);
+	const childrenToRemove = el.querySelectorAll('pi');
+	for (const child of childrenToRemove) {
+		el.remove(child);
+	}}`,
+		Call:       templ.SafeScript(`__templ_hide_1ea0`, id),
+		CallInline: templ.SafeScriptInline(`__templ_hide_1ea0`, id),
 	}
 }
 
@@ -62,7 +59,7 @@ func ModalOnce(hidden bool, elementID string, body templ.Component) templ.Compon
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, toggleModalOnce(elementID))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, toggle(elementID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -86,7 +83,7 @@ func ModalOnce(hidden bool, elementID string, body templ.Component) templ.Compon
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 templ.ComponentScript = toggleModalOnce(elementID)
+		var templ_7745c5c3_Var3 templ.ComponentScript = toggle(elementID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -95,7 +92,7 @@ func ModalOnce(hidden bool, elementID string, body templ.Component) templ.Compon
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, removeDiv(elementID))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, hide(elementID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -103,7 +100,7 @@ func ModalOnce(hidden bool, elementID string, body templ.Component) templ.Compon
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 templ.ComponentScript = removeDiv(elementID)
+		var templ_7745c5c3_Var4 templ.ComponentScript = hide(elementID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

@@ -19,31 +19,14 @@ func flexOrHidden(hidden bool) string {
 	return "flex"
 }
 
-func hide(id string) templ.ComponentScript {
+func toggleVisibility(id string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_hide_ef98`,
-		Function: `function __templ_hide_ef98(id){var el = document.getElementById(id);
-	el.classList.remove("flex");
-	el.classList.add("hidden");}`,
-		Call:       templ.SafeScript(`__templ_hide_ef98`, id),
-		CallInline: templ.SafeScriptInline(`__templ_hide_ef98`, id),
-	}
-}
-
-func toggleModal(id string) templ.ComponentScript {
-	return templ.ComponentScript{
-		Name: `__templ_toggleModal_6c88`,
-		Function: `function __templ_toggleModal_6c88(id){console.log('modal');
-	event.stopPropagation();
-	const el = document.getElementById(id);
-	el.classList.toggle("hidden");
-	el.classList.toggle("flex");
-	const errorDivs = el.querySelectorAll('div.error');
-	errorDivs.forEach((div) => {
-		div.remove();
-	});}`,
-		Call:       templ.SafeScript(`__templ_toggleModal_6c88`, id),
-		CallInline: templ.SafeScriptInline(`__templ_toggleModal_6c88`, id),
+		Name: `__templ_toggleVisibility_b406`,
+		Function: `function __templ_toggleVisibility_b406(id){event.stopPropagation();
+	const el = closestElement(event.target, "#"+id);
+	toggleClasses(el, ['hidden','flex'])}`,
+		Call:       templ.SafeScript(`__templ_toggleVisibility_b406`, id),
+		CallInline: templ.SafeScriptInline(`__templ_toggleVisibility_b406`, id),
 	}
 }
 
@@ -65,7 +48,7 @@ func Modal(hidden bool, elementID string, body templ.Component) templ.Component 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, toggleModal(elementID))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, toggleVisibility(elementID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -89,7 +72,7 @@ func Modal(hidden bool, elementID string, body templ.Component) templ.Component 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 templ.ComponentScript = toggleModal(elementID)
+		var templ_7745c5c3_Var3 templ.ComponentScript = toggleVisibility(elementID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -98,7 +81,7 @@ func Modal(hidden bool, elementID string, body templ.Component) templ.Component 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, hide(elementID))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, toggleVisibility(elementID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -106,7 +89,7 @@ func Modal(hidden bool, elementID string, body templ.Component) templ.Component 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 templ.ComponentScript = hide(elementID)
+		var templ_7745c5c3_Var4 templ.ComponentScript = toggleVisibility(elementID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
