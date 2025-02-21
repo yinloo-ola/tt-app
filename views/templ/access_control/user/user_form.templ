@@ -1,0 +1,110 @@
+package user
+
+import (
+	"strconv"
+	"slices"
+	"fmt"
+	"github.com/yinloo-ola/tt-app/common/rbac/models"
+)
+
+func hxAction(action string, id int64) templ.Attributes {
+	if action == "new" {
+		return templ.Attributes{
+			"hx-post":   "/access_control/users",
+			"hx-target": "#user-list",
+			"hx-swap":   "afterbegin transition:true",
+		}
+	} else if action == "update" {
+		return templ.Attributes{
+			"hx-put":    "/access_control/users",
+			"hx-target": fmt.Sprintf("#user-row-%d", id),
+			"hx-swap":   "outerHTML transition:true",
+		}
+	}
+	return templ.Attributes{}
+}
+
+func isSelected(rol models.Role, all []models.Role) bool {
+	return slices.ContainsFunc(all, func(p models.Role) bool {
+		return p.ID == rol.ID
+	})
+}
+
+script toggleModal() {
+  const form = event.target.closest("form");
+  form.reset();
+  const eventToggleModal = new CustomEvent("toggle-modal", {
+    bubbles: true,
+  });
+  event.target.dispatchEvent(eventToggleModal);
+}
+
+script toggleModalIfSuccessful() {
+  if (!event.detail.successful) {
+    return;
+  }
+  event.target.reset();
+    const eventToggleModal = new CustomEvent("toggle-modal", {
+    bubbles: true,
+  });
+  event.target.dispatchEvent(eventToggleModal);
+}
+
+templ UserForm(action string, id int64, userID string, all, selected []models.Role) {
+	<form
+		{ hxAction(action, id)... }
+		hx-on::after-request={ toggleModalIfSuccessful() }
+		class="flex flex-col gap-4"
+	>
+		<div class="flex flex-col">
+			<input
+				type="text"
+				id="id"
+				name="id"
+				value={ strconv.Itoa(int(id)) }
+				class="hidden border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+				if action =="update" {
+					required
+				}
+			/>
+			<label for="user" class="mb-2 block text-amber-9 text-sm">User</label>
+			<input
+				type="text"
+				id="user"
+				name="userID"
+				value={ userID }
+				class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+				required
+			/>
+		</div>
+		<div class="flex flex-col">
+			<label for="roles" class="mb-2 block text-amber-9 text-sm">Roles</label>
+			<select
+				name="roles"
+				id="roles"
+				multiple
+				class="border rounded-lg border-solid py-2 px-4 focus:border-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+			>
+				for _, rol := range all {
+					<option value={ strconv.FormatInt(rol.ID, 10) } selected?={ isSelected(rol, selected) }>{ rol.Name }</option>
+				}
+			</select>
+		</div>
+		<div id="user-form-error"></div>
+		<div class="flex justify-end gap-4 py-2">
+			<button
+				onclick={ toggleModal() }
+				type="button"
+				class="rounded-lg border-none bg-transparent p-2 font-semibold text-amber-7 hover:bg-amber-7 hover:text-white active:bg-amber-6 hover:border-transparent"
+			>
+				<div>Cancel</div>
+			</button>
+			<button
+				type="submit"
+				class="border-emerald-7 border-2 rounded-lg border-solid bg-transparent p-2 font-semibold text-emerald-7 hover:bg-emerald-7 hover:text-white active:bg-emerald-6 hover:border-transparent"
+			>
+				<div>Submit</div>
+			</button>
+		</div>
+	</form>
+}

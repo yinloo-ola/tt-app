@@ -6,6 +6,4 @@ function toggleClasses(element, clzes) {
 function elementByID(id) {
     return document.getElementById(id);
 }
-function closestElement(node, selector) {
-    return node.closest(selector);
-}
+

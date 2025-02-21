@@ -4,7 +4,7 @@ import "fmt"
 
 script toggle(id string) {
 	event.stopPropagation();
-	const el = closestElement(event.target, "#"+id);
+	const el = htmx.closest(event.target, "#"+id);
 	toggleClasses(el, ['hidden','flex']);
 	if (el.classList.contains('flex')) {
 		console.log('is hidden now');
@@ -13,7 +13,7 @@ script toggle(id string) {
 
 script hide(id string) {
 	event.stopPropagation();
-	const el = closestElement(event.target, "#"+id);
+	const el = htmx.closest(event.target, "#"+id);
 	toggleClasses(el, ['hidden','flex']);
 	const childrenToRemove = el.querySelectorAll('pi');
 	for (const child of childrenToRemove) {
